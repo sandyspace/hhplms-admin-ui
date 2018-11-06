@@ -38,7 +38,7 @@
 </template>
 <script>
 import { loadGenders } from '@/api/dict'
-import { accountSelect, updateAccount } from '@/api/account'
+import { detailSelect, updateAccount } from '@/api/account'
 
 export default {
   name: 'AccountEdit',
@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     fetchData() {
-      accountSelect(this.$route.params.id).then(response => {
+      detailSelect(this.$route.params.id).then(response => {
         this.account = response.data.content
       })
     },
@@ -100,29 +100,24 @@ export default {
         this.genders = response.data.content
       })
     },
-    handleFilter() {
-      this.listQuery.pageNo = 1
-      this.fetchData()
-    },
     handleUpdate: function(id) {
       this.$router.push({ name: '用户修改', params: { id: id }})
     },
     updateData: function() {
       updateAccount(this.$route.params.id, this.account).then(response => {
-        if (response.data.status === 1) {
-          this.open()
+        this.$notify({
+          title: '成功',
+          message: '修改成功',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(err => {
+        if (err.data.errorMsg) {
+          console.log(err.data.errorMsg)
         }
-      })
-    },
-    open() {
-      this.$message({
-        showClose: true,
-        message: 'Update success',
-        type: 'success'
       })
     }
   }
 }
 
 </script>
-

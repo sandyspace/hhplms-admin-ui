@@ -1,23 +1,24 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('用户名')" v-model="listQuery.loginName" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-input :placeholder="$t('手机号')" v-model="listQuery.mobile" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-input :placeholder="$t('真实姓名')" v-model="listQuery.realName" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.gender" :placeholder="$t('性别')" style="width: 140px">
+      <el-input :placeholder="$t('用户名')" v-model="listQuery.loginName" clearable style="width: 200px;" @keyup.enter.native="handleFilter"/>
+      <el-input :placeholder="$t('手机号')" v-model="listQuery.mobile" clearable style="width: 200px;" @keyup.enter.native="handleFilter"/>
+      <el-input :placeholder="$t('真实姓名')" v-model="listQuery.realName" clearable style="width: 200px;" @keyup.enter.native="handleFilter"/>
+      <el-select v-model="listQuery.gender" :placeholder="$t('性别')" clearable style="width: 140px">
         <el-option v-for="item in genders" :key="item.key" :label="item.value" :value="item.key"/>
       </el-select>
 
-      <el-select v-model="listQuery.status" :placeholder="$t('状态')" style="width: 140px">
+      <el-select v-model="listQuery.status" :placeholder="$t('状态')" clearable style="width: 140px">
         <el-option v-for="item in statuses" :key="item.key" :label="item.value" :value="item.key"/>
       </el-select>
 
-      <el-select v-model="listQuery.type" :placeholder="$t('用户类型')" style="width: 140px">
-        <el-option v-for="item in typess" :key="item.key" :label="item.value" :value="item.key"/>
+      <el-select v-model="listQuery.type" :placeholder="$t('用户类型')" clearable style="width: 140px">
+        <el-option v-for="item in types" :key="item.key" :label="item.value" :value="item.key"/>
       </el-select>
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
-
+      <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+      <router-link :to="'/account/create'">
+        <el-button style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建</el-button>
+      </router-link>
     </div>
 
     <el-table v-loading="listLoading" :data="list" element-loading-text="拼命加载中">
@@ -42,7 +43,7 @@
             <el-form-item label="性别">
               <span>{{ props.row.gender | genderFormatter(genders) }}</span>
             </el-form-item>
-            <el-form-item label="头衔">
+            <el-form-item label="昵称">
               <span>{{ props.row.nickName }}</span>
             </el-form-item>
             <el-form-item label="状态">
@@ -86,8 +87,8 @@
         :page-sizes="[10,20,30,50]"
         :page-size="listQuery.pageSize"
         :total="total"
+        background
         layout="total, sizes, prev, pager, next, jumper"
-        align="center"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"/>
     </div>
@@ -107,8 +108,8 @@
 
 <script>
 import { loadGenders, loadAccountTypes, loadAccountStatuses } from '@/api/dict'
-import { accountList, detailSelect, resetPwd, updateAccountStatus } from '@/api/account'
-import { rolesList, addRoleToAccount } from '@/api/role'
+import { accountList, detailSelect, resetPwd, updateAccountStatus, addRoleToAccount } from '@/api/account'
+import { loadAvailableRoles } from '@/api/role'
 
 export default {
   name: 'AccountList',
@@ -146,7 +147,7 @@ export default {
       },
       genders: [],
       statuses: [],
-      typess: [],
+      types: [],
       roles: [],
       dialogFormVisible: false,
       accountId: '',
@@ -188,15 +189,12 @@ export default {
     },
     getTypes: function() {
       loadAccountTypes().then(response => {
-        this.typess = response.data.content
+        this.types = response.data.content
       })
     },
     handleFilter() {
       this.listQuery.pageNo = 1
       this.fetchData()
-    },
-    handleCreate: function() {
-      this.$router.push({ path: 'add' })
     },
     handleUpdate: function(id) {
       this.$router.push({ name: 'accountEdit', params: { id: id }})
@@ -208,7 +206,7 @@ export default {
       this.dialogFormVisible = true
       this.accountId = id
       this.checkedList = []
-      rolesList().then(response => {
+      loadAvailableRoles().then(response => {
         this.roles = response.data.content
       }).catch(error => {
         throw new Error(error)
@@ -224,18 +222,18 @@ export default {
     },
     addRoleToAccount: function() {
       addRoleToAccount(this.accountId, this.checkedList).then(response => {
-        if (response.data.status === 1) {
-          this.success()
+        this.$notify({
+          title: '成功',
+          message: '分配成功',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(err => {
+        if (err.data.errorMsg) {
+          console.log(err.data.errorMsg)
         }
-        this.dialogFormVisible = false
       })
-    },
-    success: function() {
-      this.$message({
-        showClose: true,
-        message: 'Update success',
-        type: 'success'
-      })
+      this.dialogFormVisible = false
     },
     resetPwd: function(id) {
       this.$confirm('确认要重置密码吗, 是否继续?', '提示', {

@@ -1,20 +1,5 @@
 import request from '@/utils/request'
 
-export function rolesList() {
-  return request({
-    url: '/rs/ana/roles/available',
-    method: 'get'
-  })
-}
-
-export function addRoleToAccount(id, ids) {
-  return request({
-    url: '/rs/ana/accounts/' + id + '/roles',
-    method: 'post',
-    data: ids
-  })
-}
-
 export function loadAvailableRoles() {
   return request({
     url: '/rs/ana/roles/available',

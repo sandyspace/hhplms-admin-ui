@@ -70,7 +70,12 @@ export default {
     roleMgmt: '角色管理',
     roleList: '角色列表',
     roleCreation: '角色创建',
-    roleEdit: '角色编辑'
+    roleEdit: '角色编辑',
+    accountMgmt: '账号管理',
+    accountDetail: '账号详情',
+    accountList: '账号列表',
+    accountCreation: '账号创建',
+    accountEdit: '账号编辑'
   },
   navbar: {
     logOut: '退出登录',

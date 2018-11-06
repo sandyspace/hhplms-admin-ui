@@ -70,7 +70,12 @@ export default {
     roleMgmt: 'Role Management',
     roleList: 'Role List',
     roleCreation: 'Role Creation',
-    roleEdit: 'Role Edit'
+    roleEdit: 'Role Edit',
+    accountMgmt: 'Account Management',
+    accountDetail: 'Account Detail',
+    accountList: 'Account List',
+    accountCreation: 'Account Creation',
+    accountEdit: 'Account Edit'
   },
   navbar: {
     logOut: 'Log Out',

@@ -32,7 +32,7 @@
       </el-form-item>
       <el-form-item :label="$t('用户类型')">
         <el-select v-model="account.type" class="filter-item" placeholder="请选择">
-          <el-option v-for="item in typess" :key="item.key" :label="item.value" :value="item.key"/>
+          <el-option v-for="item in types" :key="item.key" :label="item.value" :value="item.key"/>
         </el-select>
       </el-form-item>
 
@@ -67,7 +67,7 @@ export default {
       },
       genders: [],
       statuses: [],
-      typess: [],
+      types: [],
       rules: {
         loginName: [{
           required: true, message: '请输入用户名', trigger: 'blur'
@@ -107,30 +107,28 @@ export default {
     },
     getTypes: function() {
       loadAccountTypes().then(response => {
-        this.typess = response.data.content
+        this.types = response.data.content
         console.log(this.listQuery.type)
       })
     },
     createData: function() {
       addAccount(this.$route.params.id, this.account).then(response => {
-        if (response.data.status === 1) {
-        //  this.user = null;
-          this.open()
+        this.$notify({
+          title: '成功',
+          message: '添加成功',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(err => {
+        if (err.data.errorMsg) {
+          console.log(err.data.errorMsg)
         }
       })
     },
     close: function() {
       this.$store.dispatch('delVisitedView', '1')
-    },
-    open() {
-      this.$message({
-        showClose: true,
-        message: 'Add success',
-        type: 'success'
-      })
     }
   }
 }
 
 </script>
-

@@ -8,13 +8,6 @@ export function accountList(account) {
   })
 }
 
-export function accountSelect(id) {
-  return request({
-    url: '/rs/ana/accounts/' + id,
-    method: 'get'
-  })
-}
-
 export function detailSelect(id) {
   return request({
     url: '/rs/ana/accounts/' + id,
@@ -31,10 +24,8 @@ export function updateAccount(id, user) {
       loginName: user.loginName,
       mobile: user.mobile,
       nickName: user.nickName,
-      realName: user.realName,
-      versionNum: 1
-    },
-    emulateJSON: true
+      realName: user.realName
+    }
   })
 }
 export function addAccount(id, user) {
@@ -49,10 +40,8 @@ export function addAccount(id, user) {
       mobile: user.mobile,
       gender: user.gender,
       status: user.status,
-      type: user.type,
-      versionNum: 1
-    },
-    emulateJSON: true
+      type: user.type
+    }
   })
 }
 export function resetPwd(id) {
@@ -67,5 +56,13 @@ export function updateAccountStatus(id, updateStatusRequest) {
     url: '/rs/ana/accounts/' + id + '/updateStatus',
     method: 'patch',
     data: updateStatusRequest
+  })
+}
+
+export function addRoleToAccount(id, ids) {
+  return request({
+    url: '/rs/ana/accounts/' + id + '/roles',
+    method: 'post',
+    data: ids
   })
 }
