@@ -40,3 +40,25 @@ export function numberFormatter(num, digits) {
 export function toThousandFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
 }
+
+export function keyToValue(key, dictEntries) {
+  if (dictEntries && dictEntries.length !== 0) {
+    for (let i = 0; i < dictEntries.length; i++) {
+      if (key === dictEntries[i].key) {
+        return dictEntries[i].value
+      }
+    }
+  }
+  return key
+}
+
+export function idToName(id, idNamePairs) {
+  if (idNamePairs && idNamePairs.length !== 0) {
+    for (let i = 0; i < idNamePairs.length; i++) {
+      if (id === idNamePairs[i].id) {
+        return idNamePairs[i].name
+      }
+    }
+  }
+  return '无'
+}

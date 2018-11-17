@@ -1,47 +1,31 @@
 import request from '@/utils/request'
 
-export function accountList(account) {
+export function loadAccounts(queryParams) {
   return request({
     url: '/rs/ana/accounts',
     method: 'get',
-    params: account
+    params: queryParams
   })
 }
 
-export function detailSelect(id) {
+export function loadDetail(id) {
   return request({
     url: '/rs/ana/accounts/' + id,
     method: 'get'
   })
 }
-export function updateAccount(id, user) {
+export function updateAccount(id, account) {
   return request({
     url: '/rs/ana/accounts/' + id,
     method: 'put',
-    data: {
-      email: user.email,
-      gender: user.gender,
-      loginName: user.loginName,
-      mobile: user.mobile,
-      nickName: user.nickName,
-      realName: user.realName
-    }
+    data: account
   })
 }
-export function addAccount(id, user) {
+export function createAccount(account) {
   return request({
     url: '/rs/ana/accounts',
     method: 'post',
-    data: {
-      loginName: user.loginName,
-      nickName: user.nickName,
-      realName: user.realName,
-      email: user.email,
-      mobile: user.mobile,
-      gender: user.gender,
-      status: user.status,
-      type: user.type
-    }
+    data: account
   })
 }
 export function resetPwd(id) {

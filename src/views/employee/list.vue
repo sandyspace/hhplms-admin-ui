@@ -144,6 +144,7 @@ export default {
       this.getEmployees()
     },
     handleFilter() {
+      this.queryParams.pageNo = 1
       this.getEmployees()
     },
     getGenders() {

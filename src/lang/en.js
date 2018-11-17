@@ -75,7 +75,19 @@ export default {
     accountDetail: 'Account Detail',
     accountList: 'Account List',
     accountCreation: 'Account Creation',
-    accountEdit: 'Account Edit'
+    accountEdit: 'Account Edit',
+    pendingItemMgmt: 'Pending Item Management',
+    pendingItemList: 'Pending Item List',
+    preferentialMsgMgmt: 'Preferential Msg Management',
+    preferentialMsgList: 'Preferential Msg List',
+    preferentialMsgCreation: 'Preferential Msg Creation',
+    preferentialMsgEdit: 'Preferential Msg Edit',
+    companyInfoMgmt: 'Company Info Management',
+    companyInfoList: 'Company Info List',
+    companyInfoCreation: 'Company Info Creation',
+    companyInfoEdit: 'Company Info Edit',
+    feedbackMgmt: 'Feedback Management',
+    feedbackList: 'Feedback List'
   },
   navbar: {
     logOut: 'Log Out',

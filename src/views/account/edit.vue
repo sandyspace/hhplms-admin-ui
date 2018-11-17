@@ -1,33 +1,38 @@
 <template>
   <div class="app-container" >
-    <el-form ref="dataForm" :rules="rules" :model="account" label-position="left" label-width="100px" style="width: 300px; margin-left:50px;">
+    <el-form ref="accountEditForm" :rules="rules" :model="account" label-width="100px">
       <el-form-item :label="$t('用户名')" prop="loginName">
-        <el-input v-model="account.loginName"/>
+        <el-input v-model="account.loginName" style="width: 200px;"/>
       </el-form-item>
-      <el-form-item :label="$t('真实姓名')" prop="title">
-        <el-input v-model="account.realName"/>
+      <el-form-item :label="$t('真实姓名')" prop="realName">
+        <el-input v-model="account.realName" style="width: 200px;"/>
       </el-form-item>
 
-      <el-form-item :label="$t('昵称')" prop="title">
-        <el-input v-model="account.nickName"/>
+      <el-form-item :label="$t('昵称')" prop="nickName">
+        <el-input v-model="account.nickName" style="width: 200px;"/>
       </el-form-item>
 
       <el-form-item :label="$t('电子邮件')" prop="email">
-        <el-input v-model="account.email"/>
+        <el-input v-model="account.email" style="width: 200px;"/>
       </el-form-item>
 
       <el-form-item :label="$t('手机号')" prop="mobile">
-        <el-input v-model="account.mobile"/>
+        <el-input v-model="account.mobile" style="width: 200px;"/>
       </el-form-item>
 
       <el-form-item :label="$t('性别')" prop="gender">
-        <el-select v-model="account.gender" placeholder="请选择">
+        <el-select v-model="account.gender" placeholder="请选择" style="width: 100px">
           <el-option v-for="item in genders" :key="item.key" :label="item.value" :value="item.key"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('所属企业')" prop="companyId">
+        <el-select v-model="account.companyId" :placeholder="'选择企业'" clearable style="width: 150px">
+          <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="updateData()">{{ $t('table.confirm') }}</el-button>
+        <el-button type="primary" @click="onSubmit()">{{ $t('table.confirm') }}</el-button>
         <router-link :to="'/account/list'">
           <el-button>{{ $t('table.cancel') }}</el-button>
         </router-link>
@@ -38,36 +43,49 @@
 </template>
 <script>
 import { loadGenders } from '@/api/dict'
-import { detailSelect, updateAccount } from '@/api/account'
+import { loadDetail, updateAccount } from '@/api/account'
+import { isValidMobile, isValidLoginName } from '@/utils/validate'
+import { getAvailableCompanyInfos } from '@/api/companyInfo'
 
 export default {
   name: 'AccountEdit',
-  filters: {
-    genderFormatter: function(value) {
-      if (value === 'male') {
-        return '男'
-      } else if (value === 'female') {
-        return '女'
-      } else {
-        return '未知'
-      }
-    }
-  },
   data() {
+    const validateMobile = (rule, value, callback) => {
+      if (value !== '') {
+        if (!isValidMobile(value)) {
+          callback(new Error('请输入有效的手机号'))
+        }
+      }
+      callback()
+    }
+    const validateLoginName = (rule, value, callback) => {
+      if (value !== '') {
+        if (value !== '') {
+          if (!isValidLoginName(value)) {
+            callback(new Error('用户名以字母开头,长度在4-30之间,只能包含字符,数字和下划线'))
+          }
+        }
+      }
+      callback()
+    }
     return {
       account: {
-        loginName: '',
-        nickName: '',
-        email: '',
-        mobile: '',
-        gender: '',
-        distributorId: 0
+        loginName: null,
+        realName: null,
+        nickName: null,
+        email: null,
+        mobile: null,
+        gender: null,
+        companyId: null
       },
       genders: [],
       statuses: [],
+      companyInfos: [],
       rules: {
         loginName: [{
           required: true, message: '请输入用户名', trigger: 'blur'
+        }, {
+          validator: validateLoginName, trigger: ['blur', 'change']
         }],
         email: [{
           required: true, message: '请输入邮箱', trigger: 'blur'
@@ -77,7 +95,7 @@ export default {
         mobile: [{
           required: true, message: '请输入手机号', trigger: 'blur'
         }, {
-          min: 11, max: 11, message: '手机号必须是11位', trigger: ['blur', 'change']
+          validator: validateMobile, trigger: ['blur', 'change']
         }],
         gender: [{
           required: true, message: '请选择性别', trigger: 'change'
@@ -86,12 +104,13 @@ export default {
     }
   },
   created() {
-    this.fetchData()
     this.getGenders()
+    this.getCompanyInfos()
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      detailSelect(this.$route.params.id).then(response => {
+      loadDetail(this.$route.params.id).then(response => {
         this.account = response.data.content
       })
     },
@@ -100,24 +119,38 @@ export default {
         this.genders = response.data.content
       })
     },
-    handleUpdate: function(id) {
-      this.$router.push({ name: '用户修改', params: { id: id }})
+    getCompanyInfos() {
+      getAvailableCompanyInfos().then(response => {
+        this.companyInfos = response.data.content
+      })
     },
-    updateData: function() {
-      updateAccount(this.$route.params.id, this.account).then(response => {
-        this.$notify({
-          title: '成功',
-          message: '修改成功',
-          type: 'success',
-          duration: 2000
-        })
-      }).catch(err => {
-        if (err.data.errorMsg) {
-          console.log(err.data.errorMsg)
+    onSubmit() {
+      this.$refs.accountEditForm.validate((valid) => {
+        if (valid) {
+          const account = {
+            loginName: this.account.loginName,
+            realName: this.account.realName,
+            nickName: this.account.nickName,
+            email: this.account.email,
+            gender: this.account.gender,
+            mobile: this.account.mobile,
+            companyId: this.account.companyId
+          }
+          updateAccount(this.$route.params.id, account).then(response => {
+            this.$notify({
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
+              duration: 2000
+            })
+          }).catch(err => {
+            if (err.data.errorMsg) {
+              console.log(err.data.errorMsg)
+            }
+          })
         }
       })
     }
   }
 }
-
 </script>

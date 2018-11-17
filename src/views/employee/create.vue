@@ -48,7 +48,7 @@ import { createEmployee } from '@/api/employee'
 import { loadGenders, loadEmployeeStatuses } from '@/api/dict'
 
 export default {
-  name: 'EmployeeCreation',
+  name: 'EmployeeCreate',
   data() {
     var validateMobile = (rule, value, callback) => {
       if (value !== '') {

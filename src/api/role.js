@@ -7,6 +7,20 @@ export function loadAvailableRoles() {
   })
 }
 
+export function loadAvailableRolesOfCompany(companyId) {
+  return request({
+    url: '/rs/ana/companyInfos/' + companyId + '/available',
+    method: 'get'
+  })
+}
+
+export function getRolesOfAccount(accountId) {
+  return request({
+    url: '/rs/ana/accounts/' + accountId + '/roles',
+    method: 'get'
+  })
+}
+
 export function getRolesOfEmployee(employeeId) {
   return request({
     url: '/rs/ana/employees/' + employeeId + '/roles',

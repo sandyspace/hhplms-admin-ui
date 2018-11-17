@@ -9,6 +9,9 @@
       <el-select v-model="queryParams.type" :placeholder="'类型'" clearable class="filter-item" style="width: 130px">
         <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
       </el-select>
+      <el-select v-model="queryParams.companyId" :placeholder="'所属分销商'" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
+      </el-select>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <router-link :to="'/role/create'">
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建</el-button>
@@ -28,16 +31,16 @@
               <span>{{ props.row.name }}</span>
             </el-form-item>
             <el-form-item label="分类">
-              <span>{{ props.row.category }}</span>
+              <span>{{ props.row.category | keyToValue(categories) }}</span>
             </el-form-item>
             <el-form-item label="类型">
-              <span>{{ props.row.type }}</span>
+              <span>{{ props.row.type | keyToValue(types) }}</span>
             </el-form-item>
             <el-form-item label="所属分销商">
-              <span>{{ props.row.distributorId }}</span>
+              <span>{{ props.row.companyId | idToName(companyInfos) }}</span>
             </el-form-item>
             <el-form-item label="状态">
-              <span>{{ props.row.status }}</span>
+              <span>{{ props.row.status | keyToValue(statuses) }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -90,7 +93,8 @@
 <script>
 import { loadRoles, addPermissionsToRole } from '@/api/role'
 import { getPermissions, getPermissionsOfRole, getApiList, getApiListOfRole } from '@/api/permission'
-import { loadRoleCategories, loadRoleTypes } from '@/api/dict'
+import { loadRoleCategories, loadRoleTypes, loadRoleStatuses } from '@/api/dict'
+import { getAvailableCompanyInfos } from '@/api/companyInfo'
 
 export default {
   name: 'EmployeeList',
@@ -109,6 +113,8 @@ export default {
       apis: [],
       categories: [],
       types: [],
+      statuses: [],
+      companyInfos: [],
       roleListLoading: true,
       roles: [],
       queryParams: {
@@ -116,7 +122,7 @@ export default {
         name: null,
         category: null,
         type: null,
-        distributorId: null,
+        companyId: null,
         pageNo: 1,
         pageSize: 10
       },
@@ -126,6 +132,8 @@ export default {
   created() {
     this.getCategories()
     this.getTypes()
+    this.getStatuses()
+    this.getCompanyInfos()
     this.getRoles()
   },
   methods: {
@@ -137,6 +145,16 @@ export default {
     getTypes() {
       loadRoleTypes().then(response => {
         this.types = response.data.content
+      })
+    },
+    getStatuses() {
+      loadRoleStatuses().then(response => {
+        this.statuses = response.data.content
+      })
+    },
+    getCompanyInfos() {
+      getAvailableCompanyInfos().then(response => {
+        this.companyInfos = response.data.content
       })
     },
     getRoles() {
@@ -156,6 +174,7 @@ export default {
       this.getRoles()
     },
     handleFilter() {
+      this.queryParams.pageNo = 1
       this.getRoles()
     },
     prepareToAddPermissionsToRole(roleId) {

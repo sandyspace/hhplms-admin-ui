@@ -1,0 +1,55 @@
+import request from '@/utils/request'
+
+export function loadCompanyInfos(queryParams) {
+  return request({
+    url: '/rs/ana/companyInfos',
+    method: 'get',
+    params: queryParams
+  })
+}
+
+export function getAvailableCompanyInfos() {
+  return request({
+    url: '/rs/ana/companyInfos/available',
+    method: 'get'
+  })
+}
+
+export function loadDetail(id) {
+  return request({
+    url: '/rs/ana/companyInfos/' + id,
+    method: 'get'
+  })
+}
+
+export function deleteCompanyInfo(id) {
+  return request({
+    url: '/rs/ana/companyInfos/' + id,
+    method: 'delete'
+  })
+}
+
+export function createCompanyInfo(companyInfo) {
+  return request({
+    url: '/rs/ana/companyInfos',
+    method: 'post',
+    data: companyInfo
+  })
+}
+
+export function updateCompanyInfo(id, companyInfo) {
+  return request({
+    url: '/rs/ana/companyInfos/' + id,
+    method: 'put',
+    data: companyInfo
+  })
+}
+
+export function updateCompanyInfoStatus(id, updateStatusRequest) {
+  return request({
+    url: '/rs/ana/companyInfos/' + id + '/updateStatus',
+    method: 'patch',
+    data: updateStatusRequest
+  })
+}
+

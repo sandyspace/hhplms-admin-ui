@@ -17,13 +17,19 @@
               <span>{{ account.mobile }}</span>
             </el-form-item>
             <el-form-item label="性别">
-              <span>{{ account.gender| genderFormatter(genders) }}</span>
+              <span>{{ account.gender| keyToValue(genders) }}</span>
             </el-form-item>
             <el-form-item label="昵称">
               <span>{{ account.nickName }}</span>
             </el-form-item>
             <el-form-item label="状态">
-              <span>{{ account.status | statusFormatter(statuses) }}</span>
+              <span>{{ account.status | keyToValue(statuses) }}</span>
+            </el-form-item>
+            <el-form-item label="类型">
+              <span>{{ account.type | keyToValue(types) }}</span>
+            </el-form-item>
+            <el-form-item label="所属企业">
+              <span>{{ account.companyId | idToName(companyInfos) }}</span>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -43,27 +49,12 @@
   </div>
 </template>
 <script>
-import { detailSelect } from '@/api/account'
-import { loadGenders, loadAccountStatuses } from '@/api/dict'
+import { loadDetail } from '@/api/account'
+import { loadGenders, loadAccountStatuses, loadAccountTypes } from '@/api/dict'
+import { getAvailableCompanyInfos } from '@/api/companyInfo'
 
 export default {
   name: 'AccountDetails',
-  filters: {
-    genderFormatter: function(value, genders) {
-      for (const i in genders) {
-        if (genders[i].key === value) {
-          return genders[i].value
-        }
-      }
-    },
-    statusFormatter: function(value, statuses) {
-      for (const i in statuses) {
-        if (statuses[i].key === value) {
-          return statuses[i].value
-        }
-      }
-    }
-  },
   data() {
     return {
       activeTabName: 'basicInfo',
@@ -75,13 +66,17 @@ export default {
         mobile: '',
         gender: '',
         status: '',
+        type: '',
         nickName: '',
+        companyId: null,
         grantedRoles: [],
         grantedPermissions: [],
         grantedApiList: []
       },
       genders: [],
       statuses: [],
+      types: [],
+      companyInfos: [],
       defaultProps: {
         children: 'subPermissions',
         label: 'title'
@@ -91,29 +86,37 @@ export default {
   created() {
     this.getGenders()
     this.getStatus()
+    this.getTypes()
+    this.getCompanyInfos()
     this.fetchData()
   },
 
   methods: {
-    getGenders: function() {
+    getGenders() {
       loadGenders().then(response => {
         this.genders = response.data.content
       })
     },
-    getStatus: function() {
+    getStatus() {
       loadAccountStatuses().then(response => {
         this.statuses = response.data.content
       })
     },
-    fetchData() {
-      detailSelect(this.$route.params.id).then(response => {
-        this.account = response.data.content
+    getTypes() {
+      loadAccountTypes().then(response => {
+        this.types = response.data.content
       })
     },
-    handleClick(tab, event) {
-      console.log(tab, event)
+    getCompanyInfos() {
+      getAvailableCompanyInfos().then(response => {
+        this.companyInfos = response.data.content
+      })
+    },
+    fetchData() {
+      loadDetail(this.$route.params.id).then(response => {
+        this.account = response.data.content
+      })
     }
   }
 }
-
 </script>

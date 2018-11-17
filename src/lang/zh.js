@@ -75,7 +75,19 @@ export default {
     accountDetail: '账号详情',
     accountList: '账号列表',
     accountCreation: '账号创建',
-    accountEdit: '账号编辑'
+    accountEdit: '账号编辑',
+    pendingItemMgmt: '待办事项管理',
+    pendingItemList: '待办事项列表',
+    preferentialMsgMgmt: '优惠信息管理',
+    preferentialMsgList: '优惠信息列表',
+    preferentialMsgCreation: '优惠信息创建',
+    preferentialMsgEdit: '优惠信息编辑',
+    companyInfoMgmt: '企业信息管理',
+    companyInfoList: '企业信息列表',
+    companyInfoCreation: '企业信息创建',
+    companyInfoEdit: '企业信息编辑',
+    feedbackMgmt: '留言管理',
+    feedbackList: '留言列表'
   },
   navbar: {
     logOut: '退出登录',

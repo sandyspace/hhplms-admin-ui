@@ -62,3 +62,38 @@ export function loadRoleStatuses() {
     method: 'get'
   })
 }
+
+export function loadProcessStatuses() {
+  return request({
+    url: '/rs/sys/process/statuses',
+    method: 'get'
+  })
+}
+
+export function loadStepStatuses() {
+  return request({
+    url: '/rs/sys/step/statuses',
+    method: 'get'
+  })
+}
+
+export function loadCompanyInfoTypes() {
+  return request({
+    url: '/rs/sys/companyInfo/types',
+    method: 'get'
+  })
+}
+
+export function loadCompanyInfoStatuses() {
+  return request({
+    url: '/rs/sys/companyInfo/statuses',
+    method: 'get'
+  })
+}
+
+export function loadPreferentialMsgStatuses() {
+  return request({
+    url: '/rs/sys/preferentialMsg/statuses',
+    method: 'get'
+  })
+}

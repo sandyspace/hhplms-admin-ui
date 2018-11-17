@@ -17,9 +17,14 @@
           <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
         </el-select>
       </el-form-item>
+      <el-form-item label="所属企业" prop="companyId">
+        <el-select v-model="role.companyId" :placeholder="'请选择企业'">
+          <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">立即修改</el-button>
-        <router-link :to="'/employee/list'">
+        <router-link :to="'/role/list'">
           <el-button>取消</el-button>
         </router-link>
       </el-form-item>
@@ -31,6 +36,7 @@
 import { isValidCode } from '@/utils/validate'
 import { loadRoleCategories, loadRoleTypes } from '@/api/dict'
 import { updateRole, loadDetail } from '@/api/role'
+import { getAvailableCompanyInfos } from '@/api/companyInfo'
 
 export default {
   name: 'RoleEdit',
@@ -47,6 +53,7 @@ export default {
     return {
       categories: [],
       types: [],
+      companyInfos: [],
       role: {
         code: null,
         name: null,
@@ -74,6 +81,7 @@ export default {
   created() {
     this.getCategories()
     this.getTypes()
+    this.getCompanyInfos()
     this.getDetail()
   },
   methods: {
@@ -85,6 +93,11 @@ export default {
     getTypes() {
       loadRoleTypes().then(response => {
         this.types = response.data.content
+      })
+    },
+    getCompanyInfos() {
+      getAvailableCompanyInfos().then(response => {
+        this.companyInfos = response.data.content
       })
     },
     getDetail() {
