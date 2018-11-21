@@ -92,7 +92,7 @@
 
 <script>
 import { loadRoles, addPermissionsToRole } from '@/api/role'
-import { getPermissions, getPermissionsOfRole, getApiList, getApiListOfRole } from '@/api/permission'
+import { permissionsAvailableToAssign, getPermissionsOfRole, apisAvailableToAssign, getApiListOfRole } from '@/api/permission'
 import { loadRoleCategories, loadRoleTypes, loadRoleStatuses } from '@/api/dict'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
 
@@ -200,7 +200,7 @@ export default {
       }).catch(error => {
         throw new Error(error)
       }).then(() => {
-        getPermissions().then(response => {
+        permissionsAvailableToAssign(roleId).then(response => {
           this.permissions = response.data.content
         }).catch(error => {
           throw new Error(error)
@@ -243,7 +243,7 @@ export default {
       }).catch(error => {
         throw new Error(error)
       }).then(() => {
-        getApiList().then(response => {
+        apisAvailableToAssign(roleId).then(response => {
           this.apis = response.data.content
         }).catch(error => {
           throw new Error(error)

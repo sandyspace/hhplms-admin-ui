@@ -1,16 +1,22 @@
 import request from '@/utils/request'
 
-export function getPermissions() {
+export function permissionsAvailableToAssign(refRoleId) {
   return request({
     url: '/rs/ana/permissions',
-    method: 'get'
+    method: 'get',
+    params: {
+      refRoleId
+    }
   })
 }
 
-export function getApiList() {
+export function apisAvailableToAssign(refRoleId) {
   return request({
     url: '/rs/ana/apis',
-    method: 'get'
+    method: 'get',
+    params: {
+      refRoleId
+    }
   })
 }
 
