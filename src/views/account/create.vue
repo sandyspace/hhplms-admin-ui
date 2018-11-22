@@ -30,12 +30,12 @@
           <el-option v-for="status in statuses" :key="status.key" :label="status.value" :value="status.key"/>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('用户类型')" prop="type">
+      <el-form-item v-if="ifEmployee()" :label="$t('用户类型')" prop="type">
         <el-select v-model="account.type" placeholder="请选择">
           <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('所属企业')" prop="companyId">
+      <el-form-item v-if="ifEmployee()" :label="$t('所属企业')" prop="companyId">
         <el-select v-model="account.companyId" :placeholder="'选择企业'" clearable style="width: 150px">
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
@@ -51,11 +51,14 @@
 
   </div>
 </template>
+
 <script>
+import { mapGetters } from 'vuex'
 import { loadGenders, loadAccountTypes, loadAccountStatuses } from '@/api/dict'
 import { createAccount } from '@/api/account'
 import { isValidMobile, isValidLoginName } from '@/utils/validate'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
+import { isEmployee } from '@/utils/user'
 
 export default {
   name: 'AccountCreate',
@@ -122,13 +125,21 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.getGenders()
     this.getStatus()
-    this.getTypes()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getTypes()
+      this.getCompanyInfos()
+    }
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     getGenders() {
       loadGenders().then(response => {
         this.genders = response.data.content

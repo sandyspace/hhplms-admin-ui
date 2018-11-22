@@ -9,7 +9,7 @@
       <el-select v-model="queryParams.type" :placeholder="'类型'" clearable class="filter-item" style="width: 130px">
         <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
       </el-select>
-      <el-select v-model="queryParams.companyId" :placeholder="'所属分销商'" clearable class="filter-item" style="width: 130px">
+      <el-select v-if="ifEmployee()" v-model="queryParams.companyId" :placeholder="'所属企业'" clearable class="filter-item" style="width: 130px">
         <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
       </el-select>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
@@ -36,7 +36,7 @@
             <el-form-item label="类型">
               <span>{{ props.row.type | keyToValue(types) }}</span>
             </el-form-item>
-            <el-form-item label="所属分销商">
+            <el-form-item v-if="ifEmployee()" label="所属企业">
               <span>{{ props.row.companyId | idToName(companyInfos) }}</span>
             </el-form-item>
             <el-form-item label="状态">
@@ -53,11 +53,11 @@
         label="操作"
         width="200">
         <template slot-scope="scope">
-          <router-link :to="'/role/edit/'+scope.row.id">
+          <router-link v-if="couldOperateRole(scope.row.type)" :to="'/role/edit/'+scope.row.id">
             <el-button type="text" size="small">编辑</el-button>
           </router-link>
-          <el-button type="text" size="small" @click="prepareToAddPermissionsToRole(scope.row.id)">分配菜单</el-button>
-          <el-button type="text" size="small" @click="prepareToAddApisToRole(scope.row.id)">分配接口</el-button>
+          <el-button v-if="couldOperateRole(scope.row.type)" type="text" size="small" @click="prepareToAddPermissionsToRole(scope.row.id)">分配菜单</el-button>
+          <el-button v-if="couldOperateRole(scope.row.type)" type="text" size="small" @click="prepareToAddApisToRole(scope.row.id)">分配接口</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -91,10 +91,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { loadRoles, addPermissionsToRole } from '@/api/role'
 import { permissionsAvailableToAssign, getPermissionsOfRole, apisAvailableToAssign, getApiListOfRole } from '@/api/permission'
 import { loadRoleCategories, loadRoleTypes, loadRoleStatuses } from '@/api/dict'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
+import { isEmployee, canOperateRole } from '@/utils/user'
 
 export default {
   name: 'EmployeeList',
@@ -129,14 +131,25 @@ export default {
       totalCount: 0
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.getCategories()
     this.getTypes()
     this.getStatuses()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getCompanyInfos()
+    }
     this.getRoles()
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
+    couldOperateRole(roleType) {
+      return canOperateRole(this.type, roleType)
+    },
     getCategories() {
       loadRoleCategories().then(response => {
         this.categories = response.data.content

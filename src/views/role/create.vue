@@ -7,17 +7,17 @@
       <el-form-item label="名称" prop="name">
         <el-input v-model="role.name" style="width: 100px;" />
       </el-form-item>
-      <el-form-item label="分类" prop="category">
+      <el-form-item v-if="ifEmployee()" label="分类" prop="category">
         <el-select v-model="role.category" placeholder="请选择分类">
           <el-option v-for="category in categories" :key="category.key" :label="category.value" :value="category.key"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="类型" prop="type">
+      <el-form-item v-if="ifEmployee()" label="类型" prop="type">
         <el-select v-model="role.type" placeholder="请选择类型">
           <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="所属企业" prop="companyId">
+      <el-form-item v-if="ifEmployee()" label="所属企业" prop="companyId">
         <el-select v-model="role.companyId" :placeholder="'请选择企业'">
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
@@ -33,10 +33,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { isValidCode } from '@/utils/validate'
 import { loadRoleCategories, loadRoleTypes } from '@/api/dict'
 import { createRole } from '@/api/role'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
+import { isEmployee } from '@/utils/user'
 
 export default {
   name: 'RoleCreation',
@@ -79,12 +81,20 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
-    this.getCategories()
-    this.getTypes()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getCategories()
+      this.getTypes()
+      this.getCompanyInfos()
+    }
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     getCategories() {
       loadRoleCategories().then(response => {
         this.categories = response.data.content

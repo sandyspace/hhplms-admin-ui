@@ -25,10 +25,10 @@
             <el-form-item label="状态">
               <span>{{ account.status | keyToValue(statuses) }}</span>
             </el-form-item>
-            <el-form-item label="类型">
+            <el-form-item v-if="ifEmployee()" label="类型">
               <span>{{ account.type | keyToValue(types) }}</span>
             </el-form-item>
-            <el-form-item label="所属企业">
+            <el-form-item v-if="ifEmployee()" label="所属企业">
               <span>{{ account.companyId | idToName(companyInfos) }}</span>
             </el-form-item>
           </el-form>
@@ -48,10 +48,13 @@
     </el-form>
   </div>
 </template>
+
 <script>
+import { mapGetters } from 'vuex'
 import { loadDetail } from '@/api/account'
 import { loadGenders, loadAccountStatuses, loadAccountTypes } from '@/api/dict'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
+import { isEmployee } from '@/utils/user'
 
 export default {
   name: 'AccountDetails',
@@ -83,15 +86,22 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.getGenders()
     this.getStatus()
-    this.getTypes()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getTypes()
+      this.getCompanyInfos()
+    }
     this.fetchData()
   },
-
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     getGenders() {
       loadGenders().then(response => {
         this.genders = response.data.content

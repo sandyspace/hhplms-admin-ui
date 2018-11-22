@@ -25,7 +25,7 @@
           <el-option v-for="item in genders" :key="item.key" :label="item.value" :value="item.key"/>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('所属企业')" prop="companyId">
+      <el-form-item v-if="ifEmployee()" :label="$t('所属企业')" prop="companyId">
         <el-select v-model="account.companyId" :placeholder="'选择企业'" clearable style="width: 150px">
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
@@ -41,11 +41,14 @@
 
   </div>
 </template>
+
 <script>
+import { mapGetters } from 'vuex'
 import { loadGenders } from '@/api/dict'
 import { loadDetail, updateAccount } from '@/api/account'
 import { isValidMobile, isValidLoginName } from '@/utils/validate'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
+import { isEmployee } from '@/utils/user'
 
 export default {
   name: 'AccountEdit',
@@ -103,12 +106,20 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.getGenders()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getCompanyInfos()
+    }
     this.fetchData()
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     fetchData() {
       loadDetail(this.$route.params.id).then(response => {
         this.account = response.data.content

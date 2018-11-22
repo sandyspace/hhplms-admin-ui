@@ -6,6 +6,7 @@ const user = {
     profile: null,
     roles: [],
     name: '',
+    type: '',
     avatar: '',
     token: getToken(),
     refreshToken: getRefreshToken()
@@ -14,17 +15,26 @@ const user = {
     SET_PROFILE: (state, profile) => {
       state.profile = profile
     },
+    CLEAR_PROFILE: (state) => {
+      state.profile = null
+    },
     SET_ROLES: (state, roles) => {
       state.roles = roles
     },
     SET_NAME: (state, name) => {
       state.name = name
     },
+    SET_TYPE: (state, type) => {
+      state.type = type
+    },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    CLEAR_TOKEN: (state) => {
+      state.token = null
     },
     SET_REFRESH_TOKEN: (state, refreshToken) => {
       state.refreshToken = refreshToken
@@ -74,6 +84,7 @@ const user = {
             commit('SET_ROLES', roles)
           }
           commit('SET_NAME', profile.basicInfo.loginName)
+          commit('SET_TYPE', profile.basicInfo.type)
           commit('SET_AVATAR', profile.basicInfo.headImgUrl || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
           resolve(profile.permissions)
         }).catch(error => {
@@ -83,8 +94,8 @@ const user = {
     },
     logout({ commit }) {
       return new Promise(resolve => {
-        commit('SET_PROFILE', null)
-        commit('SET_TOKEN', '')
+        commit('CLEAR_PROFILE')
+        commit('CLEAR_TOKEN')
         removeToken()
         resolve()
       })

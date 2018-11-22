@@ -10,10 +10,10 @@
       <el-select v-model="queryParams.status" :placeholder="$t('状态')" clearable style="width: 100px">
         <el-option v-for="status in statuses" :key="status.key" :label="status.value" :value="status.key"/>
       </el-select>
-      <el-select v-model="queryParams.type" :placeholder="$t('用户类型')" clearable style="width: 120px">
+      <el-select v-if="ifEmployee()" v-model="queryParams.type" :placeholder="$t('用户类型')" clearable style="width: 120px">
         <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
       </el-select>
-      <el-select v-model="queryParams.companyId" :placeholder="'所属企业'" clearable style="width: 150px">
+      <el-select v-if="ifEmployee()" v-model="queryParams.companyId" :placeholder="'所属企业'" clearable style="width: 150px">
         <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
       </el-select>
       <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
@@ -50,10 +50,10 @@
             <el-form-item label="状态">
               <span>{{ props.row.status | keyToValue(statuses) }}</span>
             </el-form-item>
-            <el-form-item label="类型">
+            <el-form-item v-if="ifEmployee()" label="类型">
               <span>{{ props.row.type | keyToValue(types) }}</span>
             </el-form-item>
-            <el-form-item label="所属企业">
+            <el-form-item v-if="ifEmployee()" label="所属企业">
               <span>{{ props.row.companyId | idToName(companyInfos) }}</span>
             </el-form-item>
           </el-form>
@@ -114,10 +114,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { loadGenders, loadAccountTypes, loadAccountStatuses } from '@/api/dict'
 import { loadAccounts, resetPwd, updateAccountStatus, addRoleToAccount } from '@/api/account'
 import { loadAvailableRolesOfCompany, getRolesOfAccount } from '@/api/role'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
+import { isEmployee } from '@/utils/user'
 
 export default {
   name: 'AccountList',
@@ -147,14 +149,22 @@ export default {
       availableRoles: []
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.getGenders()
     this.getStatus()
-    this.getTypes()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getTypes()
+      this.getCompanyInfos()
+    }
     this.fetchData()
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     handleSizeChange(val) {
       this.queryParams.pageSize = val
       this.fetchData()
