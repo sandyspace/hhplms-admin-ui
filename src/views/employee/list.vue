@@ -82,13 +82,14 @@
       <el-pagination v-show="totalCount>0" :current-page="queryParams.pageNo" :page-sizes="[10,20,30,50]" :page-size="queryParams.pageSize" :total="totalCount" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
     <el-dialog :visible.sync="roleAssignmentDialogVisible" title="分配角色">
-      <el-checkbox-group v-model="roleIdsOfEmployee">
+      <el-checkbox-group v-if="availableRoles.length>0" v-model="roleIdsOfEmployee">
         <el-checkbox-button v-for="role in availableRoles" :label="role.id" :key="role.id">{{ role.name }}</el-checkbox-button>
       </el-checkbox-group>
-      <div slot="footer" class="dialog-footer">
+      <div v-if="availableRoles.length>0" slot="footer" class="dialog-footer">
         <el-button size="mini" @click="roleAssignmentDialogVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="doAddRolesToEmployee">确 定</el-button>
       </div>
+      <div v-else align="center" style="font-size: 16px">暂无角色分配</div>
     </el-dialog>
   </div>
 </template>
@@ -201,8 +202,9 @@ export default {
       })
     },
     prepareToAddRolesToEmployee(employeeId) {
-      this.currentEmployeeId = employeeId
+      this.availableRoles = []
       this.roleIdsOfEmployee = []
+      this.currentEmployeeId = employeeId
       getRolesOfEmployee(employeeId).then(response => {
         const rolesOfEmployee = response.data.content
         rolesOfEmployee.forEach(role => {
@@ -212,7 +214,9 @@ export default {
         throw new Error(error)
       }).then(() => {
         loadAvailableRoles().then(response => {
-          this.availableRoles = response.data.content
+          if (response.data.content) {
+            this.availableRoles = response.data.content
+          }
         }).catch(error => {
           throw new Error(error)
         })

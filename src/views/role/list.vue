@@ -66,6 +66,7 @@
     </div>
     <el-dialog :visible.sync="permissionAssignmentDialogVisible" title="分配菜单">
       <el-tree
+        v-if="permissions.length>0"
         ref="permissionsTree"
         :data="permissions"
         :default-checked-keys="permissionIdsOfRole"
@@ -73,19 +74,21 @@
         node-key="id"
         show-checkbox
         default-expand-all />
-      <div slot="footer" class="dialog-footer">
+      <div v-if="permissions.length>0" slot="footer" class="dialog-footer">
         <el-button size="mini" @click="permissionAssignmentDialogVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="doAddPermissionsToRole">确 定</el-button>
       </div>
+      <div v-else align="center" style="font-size: 16px">暂无菜单分配</div>
     </el-dialog>
     <el-dialog :visible.sync="apiAssignmentDialogVisible" title="分配接口">
-      <el-checkbox-group v-model="apiIdsOfRole">
+      <el-checkbox-group v-if="apis.length>0" v-model="apiIdsOfRole">
         <el-checkbox-button v-for="api in apis" :label="api.id" :key="api.id">{{ api.title }}</el-checkbox-button>
       </el-checkbox-group>
-      <div slot="footer" class="dialog-footer">
+      <div v-if="apis.length>0" slot="footer" class="dialog-footer">
         <el-button size="mini" @click="apiAssignmentDialogVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="doAddApisToRole">确 定</el-button>
       </div>
+      <div v-else align="center" style="font-size: 16px">暂无接口分配</div>
     </el-dialog>
   </div>
 </template>
@@ -205,8 +208,9 @@ export default {
         }
         return permissionIds
       }
-      this.currentRoleId = roleId
+      this.permissions = []
       this.permissionIdsOfRole = []
+      this.currentRoleId = roleId
       getPermissionsOfRole(roleId).then(response => {
         const permissionsOfRole = response.data.content
         this.permissionIdsOfRole = getPermissionIds(permissionsOfRole)
@@ -214,7 +218,9 @@ export default {
         throw new Error(error)
       }).then(() => {
         permissionsAvailableToAssign(roleId).then(response => {
-          this.permissions = response.data.content
+          if (response.data.content) {
+            this.permissions = response.data.content
+          }
         }).catch(error => {
           throw new Error(error)
         })
@@ -244,8 +250,9 @@ export default {
       })
     },
     prepareToAddApisToRole(roleId) {
-      this.currentRoleId = roleId
+      this.apis = []
       this.apiIdsOfRole = []
+      this.currentRoleId = roleId
       getApiListOfRole(roleId).then(response => {
         const apiListOfRole = response.data.content
         if (apiListOfRole) {
@@ -257,7 +264,9 @@ export default {
         throw new Error(error)
       }).then(() => {
         apisAvailableToAssign(roleId).then(response => {
-          this.apis = response.data.content
+          if (response.data.content) {
+            this.apis = response.data.content
+          }
         }).catch(error => {
           throw new Error(error)
         })

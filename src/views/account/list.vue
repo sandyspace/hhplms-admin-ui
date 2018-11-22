@@ -83,6 +83,14 @@
               <el-dropdown-item v-for="status in statuses" :key="status.key" :disabled="status.key === scope.row.status" :command="scope.row.id + '@' + status.key"><span class="el-dropdown-menu-item">{{ status.value }}</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+          <el-dropdown v-if="ifEmployee()" @command="changeAccountType">
+            <span class="el-dropdown-link">
+              更新类型<i class="el-icon-arrow-down el-icon--right" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="type in types" :key="type.key" :disabled="type.key === scope.row.type" :command="scope.row.id + '@' + type.key"><span class="el-dropdown-menu-item">{{ type.value }}</span></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -101,22 +109,22 @@
     </div>
 
     <el-dialog :visible.sync="roleAssignmentDialogVisible" title="分配角色">
-      <el-checkbox-group v-model="roleIdsOfAccount">
+      <el-checkbox-group v-if="availableRoles.length>0" v-model="roleIdsOfAccount">
         <el-checkbox-button v-for="availableRole in availableRoles" :key="availableRole.id" :label="availableRole.id">{{ availableRole.name }}</el-checkbox-button>
       </el-checkbox-group>
-      <div slot="footer" class="dialog-footer">
+      <div v-if="availableRoles.length>0" slot="footer" class="dialog-footer">
         <el-button @click="roleAssignmentDialogVisible = false">{{ $t('table.cancel') }}</el-button>
         <el-button type="primary" @click="addRolesToAccount()">{{ $t('table.confirm') }}</el-button>
       </div>
+      <div v-else align="center" style="font-size: 16px">暂无角色分配</div>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { loadGenders, loadAccountTypes, loadAccountStatuses } from '@/api/dict'
-import { loadAccounts, resetPwd, updateAccountStatus, addRoleToAccount } from '@/api/account'
+import { loadAccounts, resetPwd, updateAccountStatus, updateAccountType, addRoleToAccount } from '@/api/account'
 import { loadAvailableRolesOfCompany, getRolesOfAccount } from '@/api/role'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
 import { isEmployee } from '@/utils/user'
@@ -206,8 +214,9 @@ export default {
       this.fetchData()
     },
     prepareToAddRolesToAccount(accountId, companyId) {
-      this.currentAccountId = accountId
+      this.availableRoles = []
       this.roleIdsOfAccount = []
+      this.currentAccountId = accountId
       getRolesOfAccount(accountId).then(response => {
         const rolesOfAccount = response.data.content
         if (rolesOfAccount && rolesOfAccount.length !== 0) {
@@ -219,7 +228,9 @@ export default {
         throw new Error(error)
       }).then(() => {
         loadAvailableRolesOfCompany(companyId || -99).then(response => {
-          this.availableRoles = response.data.content
+          if (response.data.content) {
+            this.availableRoles = response.data.content
+          }
         }).catch(error => {
           throw new Error(error)
         })
@@ -283,6 +294,22 @@ export default {
         this.$notify({
           title: '成功',
           message: '修改状态成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.fetchData()
+      })
+    },
+    changeAccountType(command) {
+      const commandEntries = command.split('@')
+      const accountId = parseInt(commandEntries[0])
+      const accountType = commandEntries[1]
+      updateAccountType(accountId, {
+        type: accountType
+      }).then(response => {
+        this.$notify({
+          title: '成功',
+          message: '修改类型成功',
           type: 'success',
           duration: 2000
         })

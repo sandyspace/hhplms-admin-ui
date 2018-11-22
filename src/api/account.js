@@ -35,6 +35,14 @@ export function resetPwd(id) {
   })
 }
 
+export function updateAccountType(id, updateTypeRequest) {
+  return request({
+    url: '/rs/ana/accounts/' + id + '/updateType',
+    method: 'patch',
+    data: updateTypeRequest
+  })
+}
+
 export function updateAccountStatus(id, updateStatusRequest) {
   return request({
     url: '/rs/ana/accounts/' + id + '/updateStatus',
