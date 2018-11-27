@@ -58,3 +58,19 @@ export function addRoleToAccount(id, ids) {
     data: ids
   })
 }
+
+export function changePwd(changePasswordRequest) {
+  return request({
+    url: '/rs/ana/accounts/changePwd',
+    method: 'patch',
+    data: changePasswordRequest
+  })
+}
+
+export function updateSelfInfo(updateAccountRequest) {
+  return request({
+    url: '/rs/ana/account/update',
+    method: 'put',
+    data: updateAccountRequest
+  })
+}

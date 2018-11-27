@@ -1,30 +1,30 @@
 <template>
   <div class="dashboard-container">
-    <component :is="currentRole"/>
+    <component :is="currentDashboard"/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
+import accountDashboard from './account'
+import employeeDashboard from './employee'
 
 export default {
   name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
+  components: { accountDashboard, employeeDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentDashboard: null
     }
   },
   computed: {
-    ...mapGetters([
-      'roles'
-    ])
+    ...mapGetters(['type'])
   },
   created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
+    if (this.type === 'employee') {
+      this.currentDashboard = 'employeeDashboard'
+    } else {
+      this.currentDashboard = 'accountDashboard'
     }
   }
 }

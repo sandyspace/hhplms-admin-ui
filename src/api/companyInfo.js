@@ -15,6 +15,13 @@ export function getAvailableCompanyInfos() {
   })
 }
 
+export function getCompanyInfoOfSelf() {
+  return request({
+    url: '/rs/ana/account/companyInfo',
+    method: 'get'
+  })
+}
+
 export function loadDetail(id) {
   return request({
     url: '/rs/ana/companyInfos/' + id,

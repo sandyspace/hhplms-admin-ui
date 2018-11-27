@@ -53,3 +53,19 @@ export function resetPwd(id) {
     method: 'patch'
   })
 }
+
+export function changePwd(changePasswordRequest) {
+  return request({
+    url: '/rs/ana/employees/changePwd',
+    method: 'patch',
+    data: changePasswordRequest
+  })
+}
+
+export function updateSelfInfo(updateEmployeeRequest) {
+  return request({
+    url: '/rs/ana/employee/update',
+    method: 'put',
+    data: updateEmployeeRequest
+  })
+}
