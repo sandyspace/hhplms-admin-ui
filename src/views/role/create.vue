@@ -22,6 +22,14 @@
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
       </el-form-item>
+      <el-form-item label="备注" prop="memo">
+        <el-input
+          :rows="2"
+          v-model="role.memo"
+          type="textarea"
+          style="width: 200px;"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">立即创建</el-button>
         <router-link :to="'/role/list'">
@@ -61,7 +69,8 @@ export default {
         name: null,
         category: null,
         type: null,
-        companyId: null
+        companyId: null,
+        memo: null
       },
       rules: {
         code: [{

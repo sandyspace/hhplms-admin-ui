@@ -3,10 +3,10 @@
     <div class="filter-container">
       <el-input :placeholder="'编码'" v-model="queryParams.code" clearable style="width: 100px;" class="filter-item" />
       <el-input :placeholder="'名称'" v-model="queryParams.name" clearable style="width: 150px;" class="filter-item" />
-      <el-select v-model="queryParams.category" :placeholder="'分类'" clearable class="filter-item" style="width: 130px">
+      <el-select v-if="ifEmployee()" v-model="queryParams.category" :placeholder="'分类'" clearable class="filter-item" style="width: 130px">
         <el-option v-for="category in categories" :key="category.key" :label="category.value" :value="category.key"/>
       </el-select>
-      <el-select v-model="queryParams.type" :placeholder="'类型'" clearable class="filter-item" style="width: 130px">
+      <el-select v-if="ifEmployee()" v-model="queryParams.type" :placeholder="'类型'" clearable class="filter-item" style="width: 130px">
         <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
       </el-select>
       <el-select v-if="ifEmployee()" v-model="queryParams.companyId" :placeholder="'所属企业'" clearable class="filter-item" style="width: 130px">
@@ -30,10 +30,10 @@
             <el-form-item label="名称">
               <span>{{ props.row.name }}</span>
             </el-form-item>
-            <el-form-item label="分类">
+            <el-form-item v-if="ifEmployee()" label="分类">
               <span>{{ props.row.category | keyToValue(categories) }}</span>
             </el-form-item>
-            <el-form-item label="类型">
+            <el-form-item v-if="ifEmployee()" label="类型">
               <span>{{ props.row.type | keyToValue(types) }}</span>
             </el-form-item>
             <el-form-item v-if="ifEmployee()" label="所属企业">
@@ -41,6 +41,9 @@
             </el-form-item>
             <el-form-item label="状态">
               <span>{{ props.row.status | keyToValue(statuses) }}</span>
+            </el-form-item>
+            <el-form-item label="备注">
+              <span>{{ props.row.memo }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -138,10 +141,10 @@ export default {
     ...mapGetters(['type'])
   },
   created() {
-    this.getCategories()
-    this.getTypes()
     this.getStatuses()
     if (this.ifEmployee()) {
+      this.getTypes()
+      this.getCategories()
       this.getCompanyInfos()
     }
     this.getRoles()
