@@ -22,6 +22,13 @@ export function getCompanyInfoOfSelf() {
   })
 }
 
+export function getCompanyInfoOfAccount(loginName) {
+  return request({
+    url: '/rs/ana/accounts/' + loginName + '/companyInfo',
+    method: 'get'
+  })
+}
+
 export function loadDetail(id) {
   return request({
     url: '/rs/ana/companyInfos/' + id,

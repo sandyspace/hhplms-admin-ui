@@ -14,6 +14,14 @@ export function loadDetail(id) {
     method: 'get'
   })
 }
+
+export function getAccountByLoginName(loginName) {
+  return request({
+    url: 'ana/accounts/' + loginName + '/basicInfo,
+    method: 'get'
+  })
+}
+
 export function updateAccount(id, account) {
   return request({
     url: '/rs/ana/accounts/' + id,
@@ -21,6 +29,7 @@ export function updateAccount(id, account) {
     data: account
   })
 }
+
 export function createAccount(account) {
   return request({
     url: '/rs/ana/accounts',
@@ -28,6 +37,7 @@ export function createAccount(account) {
     data: account
   })
 }
+
 export function resetPwd(id) {
   return request({
     url: '/rs/ana/accounts/' + id + '/resetPwd',

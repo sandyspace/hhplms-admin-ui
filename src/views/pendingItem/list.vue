@@ -80,14 +80,17 @@
         label="操作"
         width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="prepareToCheck(scope.row.id)">审核</el-button>
+          <el-button type="text" size="small" @click="prepareToCheck(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="pagination-container">
       <el-pagination v-show="totalCount>0" :current-page="queryParams.pageNo" :page-sizes="[10,20,30,50]" :page-size="queryParams.pageSize" :total="totalCount" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
-    <el-dialog :visible.sync="stepCheckDialogVisible" title="审核">
+    <el-dialog :visible.sync="stepCheckDialogVisible" :title="'审核 '+dialogTitle">
+      <div class="dashboard-container">
+        <component :is="checkingView" :login-name="initBy"/>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="stepCheckDialogVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="doCheck">确 定</el-button>
@@ -101,6 +104,9 @@ import { loadProcessExecutions, checkProcessExecution } from '@/api/processExecu
 import { loadProcessStatuses, loadStepStatuses } from '@/api/dict'
 import { loadAvailableProcesses } from '@/api/processInfo'
 import { getStepsOfProcess } from '@/api/step'
+import { getRouteFragment } from '@/api/route'
+import CheckCompanyInfo from ./checkingViews/CheckCompanyInfo
+import CheckJoiningAccount from ./checkingViews/CheckJoiningAccount
 
 export default {
   name: 'PendingItemList',
@@ -132,7 +138,10 @@ export default {
       },
       totalCount: 0,
       stepCheckDialogVisible: false,
-      currentProcessExecutionId: null
+      currentProcessExecutionId: null,
+      initBy: null,
+      checkingView: '',
+      dialogTitle: ''
     }
   },
   created() {
@@ -209,9 +218,14 @@ export default {
         this.stepStatues = response.data.content
       })
     },
-    prepareToCheck(processExecutionId) {
-      this.currentProcessExecutionId = processExecutionId
-      this.stepCheckDialogVisible = true
+    prepareToCheck(processExecution) {
+      this.currentProcessExecutionId = processExecution.id
+      this.initBy = processExecution.initBy
+      this.dialogTitle = processExecution.currentStep.name
+      getRouteFragment(processExecution.process.id, processExecution.currentStep.id).then(response => {
+        this.checkingView = response.data.content.viewOnChecking
+        this.stepCheckDialogVisible = true
+      })
     },
     doCheck() {
       checkProcessExecution(this.currentProcessExecutionId).then(response => {
@@ -222,9 +236,7 @@ export default {
           duration: 2000
         })
       }).catch(error => {
-        if (error.response.data.errorMsg) {
-          console.log(error.response.data.errorMsg)
-        }
+        console.log(error.message)
       })
     }
   }

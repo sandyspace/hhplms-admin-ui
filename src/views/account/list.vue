@@ -162,7 +162,7 @@ export default {
   },
   created() {
     this.getGenders()
-    this.getStatus()
+    this.getStatuses()
     if (this.ifEmployee()) {
       this.getTypes()
       this.getCompanyInfos()
@@ -189,12 +189,12 @@ export default {
         this.accountListLoading = false
       })
     },
-    getGenders: function() {
+    getGenders() {
       loadGenders().then(response => {
         this.genders = response.data.content
       })
     },
-    getStatus() {
+    getStatuses() {
       loadAccountStatuses().then(response => {
         this.statuses = response.data.content
       })
