@@ -37,7 +37,7 @@
               <span>{{ props.row.tel }}</span>
             </el-form-item>
             <el-form-item label="性别">
-              <span>{{ props.row.gender }}</span>
+              <span>{{ props.row.gender | keyToValue(genders) }}</span>
             </el-form-item>
             <el-form-item label="身份证">
               <span>{{ props.row.idCard }}</span>
@@ -46,7 +46,7 @@
               <span>{{ props.row.title }}</span>
             </el-form-item>
             <el-form-item label="状态">
-              <span>{{ props.row.status }}</span>
+              <span>{{ props.row.status | keyToValue(statuses) }}</span>
             </el-form-item>
           </el-form>
         </template>

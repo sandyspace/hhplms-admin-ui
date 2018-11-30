@@ -17,7 +17,7 @@ export function loadDetail(id) {
 
 export function getAccountByLoginName(loginName) {
   return request({
-    url: 'ana/accounts/' + loginName + '/basicInfo,
+    url: 'ana/accounts/' + loginName + '/basicInfo',
     method: 'get'
   })
 }

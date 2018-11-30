@@ -105,11 +105,15 @@ import { loadProcessStatuses, loadStepStatuses } from '@/api/dict'
 import { loadAvailableProcesses } from '@/api/processInfo'
 import { getStepsOfProcess } from '@/api/step'
 import { getRouteFragment } from '@/api/route'
-import CheckCompanyInfo from ./checkingViews/CheckCompanyInfo
-import CheckJoiningAccount from ./checkingViews/CheckJoiningAccount
+import CheckCompanyInfo from './checkingViews/CheckCompanyInfo'
+import CheckJoiningAccount from './checkingViews/CheckJoiningAccount'
 
 export default {
   name: 'PendingItemList',
+  components: {
+    CheckCompanyInfo,
+    CheckJoiningAccount
+  },
   data() {
     return {
       processes: [],

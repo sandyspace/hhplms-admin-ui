@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-form ref="roleCreationForm" :rules="rules" :model="role" label-width="80px">
       <el-form-item label="编码" prop="code">
-        <el-input v-model="role.code" style="width: 100px;" />
+        <el-input v-model="role.code" style="width: 150px;" />
       </el-form-item>
       <el-form-item label="名称" prop="name">
-        <el-input v-model="role.name" style="width: 100px;" />
+        <el-input v-model="role.name" style="width: 150px;" />
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="分类" prop="category">
         <el-select v-model="role.category" placeholder="请选择分类">

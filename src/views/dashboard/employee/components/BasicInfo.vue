@@ -187,7 +187,9 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.back()
+            this.$store.dispatch('retrieveUserProfile').then(() => {
+              this.back()
+            })
           }).catch(error => {
             console.log(error.message)
           })

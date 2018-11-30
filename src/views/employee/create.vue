@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-form ref="employCreationForm" :rules="rules" :model="employee" label-width="80px">
       <el-form-item label="用户名" prop="loginName">
-        <el-input v-model="employee.loginName" style="width: 100px;" />
+        <el-input v-model="employee.loginName" style="width: 150px;" />
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input v-model="employee.realName" style="width: 100px;" />
+        <el-input v-model="employee.realName" style="width: 150px;" />
       </el-form-item>
       <el-form-item label="邮件" prop="email">
         <el-input v-model="employee.email" style="width: 200px;" />

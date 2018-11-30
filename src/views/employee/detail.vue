@@ -16,7 +16,7 @@
             <span>{{ employee.mobile }}</span>
           </el-form-item>
           <el-form-item label="性别">
-            <span>{{ employee.gender }}</span>
+            <span>{{ employee.gender | keyToValue(genders) }}</span>
           </el-form-item>
           <el-form-item label="身份证">
             <span>{{ employee.idCard }}</span>
@@ -25,7 +25,7 @@
             <span>{{ employee.title }}</span>
           </el-form-item>
           <el-form-item label="状态">
-            <span>{{ employee.status }}</span>
+            <span>{{ employee.status | keyToValue(statuses) }}</span>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -49,6 +49,7 @@
 
 <script>
 import { loadDetail } from '@/api/employee'
+import { loadGenders, loadEmployeeStatuses } from '@/api/dict'
 
 export default {
   name: 'EmployeeDetail',
@@ -68,6 +69,8 @@ export default {
         grantedPermissions: [],
         grantedApiList: []
       },
+      statuses: [],
+      genders: [],
       defaultProps: {
         children: 'subPermissions',
         label: 'title'
@@ -75,9 +78,21 @@ export default {
     }
   },
   created() {
+    this.getGenders()
+    this.getStatuses()
     this.getDetail()
   },
   methods: {
+    getGenders() {
+      loadGenders().then(response => {
+        this.genders = response.data.content
+      })
+    },
+    getStatuses() {
+      loadEmployeeStatuses().then(response => {
+        this.statuses = response.data.content
+      })
+    },
     getDetail() {
       loadDetail(this.$route.params.id).then(response => {
         this.employee = response.data.content
