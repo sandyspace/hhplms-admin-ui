@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form ref="employEditForm" :rules="rules" :model="employee" label-width="80px">
       <el-form-item label="用户名" prop="loginName">
-        <el-input v-model="employee.loginName" style="width: 150px;" />
+        <span>{{ employee.loginName }}</span>
       </el-form-item>
       <el-form-item label="姓名">
         <el-input v-model="employee.realName" style="width: 150px;" />
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { isValidMobile, isValidLoginName } from '@/utils/validate'
+import { isValidMobile } from '@/utils/validate'
 import { loadDetail, updateEmployee } from '@/api/employee'
 import { loadGenders } from '@/api/dict'
 
@@ -49,16 +49,6 @@ export default {
       if (value !== '') {
         if (!isValidMobile(value)) {
           callback(new Error('请输入有效的手机号'))
-        }
-      }
-      callback()
-    }
-    var validateLoginName = (rule, value, callback) => {
-      if (value !== '') {
-        if (value !== '') {
-          if (!isValidLoginName(value)) {
-            callback(new Error('用户名以字母开头,长度在4-30之间,只能包含字符,数字和下划线'))
-          }
         }
       }
       callback()
@@ -77,11 +67,6 @@ export default {
         title: null
       },
       rules: {
-        loginName: [{
-          required: true, message: '请输入用户名', trigger: 'blur'
-        }, {
-          validator: validateLoginName, trigger: ['blur', 'change']
-        }],
         email: [{
           required: true, message: '请输入邮箱', trigger: 'blur'
         }, {
@@ -110,25 +95,23 @@ export default {
     },
     getDetail() {
       loadDetail(this.$route.params.id).then(response => {
-        const employee = response.data.content
-        this.employee = {
-          loginName: employee.loginName,
-          realName: employee.realName,
-          email: employee.email,
-          mobile: employee.mobile,
-          tel: employee.tel,
-          gender: employee.gender,
-          idCard: employee.idCard,
-          title: employee.title
-        }
+        this.employee = response.data.content
       }).catch(error => {
-        console.log(error.data.errorMsg)
+        console.log(error.message)
       })
     },
     onSubmit() {
       this.$refs.employEditForm.validate((valid) => {
         if (valid) {
-          updateEmployee(this.$route.params.id, this.employee).then(response => {
+          updateEmployee(this.$route.params.id, {
+            realName: this.employee.realName,
+            email: this.employee.email,
+            mobile: this.employee.mobile,
+            tel: this.employee.tel,
+            gender: this.employee.gender,
+            idCard: this.employee.idCard,
+            title: this.employee.title
+          }).then(response => {
             this.$notify({
               title: '成功',
               message: '修改成功',
@@ -136,9 +119,7 @@ export default {
               duration: 2000
             })
           }).catch(err => {
-            if (err.data.errorMsg) {
-              console.log(err.data.errorMsg)
-            }
+            console.log(err.message)
           })
         } else {
           console.log('error submit!!')

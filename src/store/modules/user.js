@@ -7,6 +7,7 @@ const user = {
     roles: [],
     name: '',
     type: '',
+    subType: '',
     avatar: '',
     token: getToken(),
     refreshToken: getRefreshToken()
@@ -26,6 +27,9 @@ const user = {
     },
     SET_TYPE: (state, type) => {
       state.type = type
+    },
+    SET_SUB_TYPE: (state, subType) => {
+      state.subType = subType
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
@@ -85,7 +89,8 @@ const user = {
           }
           commit('SET_NAME', profile.basicInfo.loginName)
           commit('SET_TYPE', profile.basicInfo.type)
-          commit('SET_AVATAR', profile.basicInfo.headImgUrl || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+          commit('SET_SUB_TYPE', profile.basicInfo.subType)
+          commit('SET_AVATAR', profile.basicInfo.headImgUrl || 'src/assets/avatar/' + profile.basicInfo.gender + '.png')
           resolve(profile.permissions)
         }).catch(error => {
           reject(error)

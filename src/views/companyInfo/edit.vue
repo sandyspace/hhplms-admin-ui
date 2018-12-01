@@ -18,8 +18,8 @@
       <el-form-item :label="$t('联系人')" prop="contactName">
         <el-input v-model="companyInfo.contactName" style="width: 200px;"/>
       </el-form-item>
-      <el-form-item :label="$t('联系电话')" prop="contactMobile">
-        <el-input v-model="companyInfo.contactMobile" style="width: 200px;"/>
+      <el-form-item :label="$t('联系电话')" prop="contactPhone">
+        <el-input v-model="companyInfo.contactPhone" style="width: 200px;"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">{{ $t('table.confirm') }}</el-button>
@@ -33,15 +33,15 @@
 <script>
 import { loadDetail, updateCompanyInfo } from '@/api/companyInfo'
 import { loadCompanyInfoTypes } from '@/api/dict'
-import { isValidMobile } from '@/utils/validate'
+import { isValidMobile, isValidPhone } from '@/utils/validate'
 
 export default {
   name: 'CompanyInfoEdit',
   data() {
-    const validateMobile = (rule, value, callback) => {
+    const validatePhone = (rule, value, callback) => {
       if (value !== '') {
-        if (!isValidMobile(value)) {
-          callback(new Error('请输入有效的手机号'))
+        if (!isValidMobile(value) && !isValidPhone(value)) {
+          callback(new Error('请输入有效的联系电话'))
         }
       }
       callback()
@@ -54,7 +54,7 @@ export default {
         type: null,
         address: null,
         contactName: null,
-        contactMobile: null
+        contactPhone: null
       },
       rules: {
         name: [{
@@ -69,10 +69,10 @@ export default {
         contactName: [{
           required: true, message: '请输入联系人', trigger: 'blur'
         }],
-        contactMobile: [{
+        contactPhone: [{
           required: true, message: '请输入手机号', trigger: 'blur'
         }, {
-          validator: validateMobile, trigger: ['blur', 'change']
+          validator: validatePhone, trigger: ['blur', 'change']
         }]
       }
     }
@@ -101,7 +101,7 @@ export default {
             type: this.companyInfo.type,
             address: this.companyInfo.address,
             contactName: this.companyInfo.contactName,
-            contactMobile: this.companyInfo.contactMobile
+            contactPhone: this.companyInfo.contactPhone
           }
           updateCompanyInfo(this.$route.params.id, companyInfo).then(response => {
             this.$notify({

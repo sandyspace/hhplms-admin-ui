@@ -8,6 +8,11 @@ export function isValidMobile(mobile) {
   return reg.test(mobile)
 }
 
+export function isValidPhone(phone) {
+  const reg = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/
+  return reg.test(phone)
+}
+
 export function isValidCode(code) {
   const reg = /^[a-zA-Z]\w{3,29}$/
   return reg.test(code)

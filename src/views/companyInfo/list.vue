@@ -6,7 +6,7 @@
         <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
       </el-select>
       <el-input :placeholder="$t('联系人')" v-model="queryParams.contactName" clearable style="width: 120px;" />
-      <el-input :placeholder="$t('联系电话')" v-model="queryParams.contactMobile" clearable style="width: 150px;" />
+      <el-input :placeholder="$t('联系电话')" v-model="queryParams.contactPhone" clearable style="width: 150px;" />
       <el-select v-model="queryParams.status" :placeholder="$t('状态')" clearable style="width: 120px">
         <el-option v-for="status in statuses" :key="status.key" :label="status.value" :value="status.key"/>
       </el-select>
@@ -38,7 +38,7 @@
       <el-table-column label="ID" prop="id" />
       <el-table-column label="企业名称" prop="name" />
       <el-table-column label="联系人" prop="contactName" />
-      <el-table-column label="联系电话" prop="contactMobile" />
+      <el-table-column label="联系电话" prop="contactPhone" />
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <router-link :to="'/companyInfo/edit/'+scope.row.id">
@@ -87,7 +87,7 @@ export default {
         code: null,
         type: null,
         contactName: null,
-        contactMobile: null,
+        contactPhone: null,
         status: null,
         pageNo: 1,
         pageSize: 10

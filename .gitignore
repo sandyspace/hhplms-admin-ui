@@ -18,4 +18,6 @@ selenium-debug.log
 *.njsproj
 *.sln
 
+static/img/preferentialMsg
+
 package-lock.json

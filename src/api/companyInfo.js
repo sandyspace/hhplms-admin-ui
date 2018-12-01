@@ -22,6 +22,14 @@ export function getCompanyInfoOfSelf() {
   })
 }
 
+export function updateSelfCompanyInfo(companyInfo) {
+  return request({
+    url: '/api/ana/account/companyInfo',
+    method: 'put',
+    data: companyInfo
+  })
+}
+
 export function getCompanyInfoOfAccount(loginName) {
   return request({
     url: '/rs/ana/accounts/' + loginName + '/companyInfo',

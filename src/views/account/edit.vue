@@ -2,7 +2,7 @@
   <div class="app-container" >
     <el-form ref="accountEditForm" :rules="rules" :model="account" label-width="100px">
       <el-form-item :label="$t('用户名')" prop="loginName">
-        <el-input v-model="account.loginName" style="width: 200px;"/>
+        <span>{{ account.loginName }}</span>
       </el-form-item>
       <el-form-item :label="$t('真实姓名')" prop="realName">
         <el-input v-model="account.realName" style="width: 200px;"/>
@@ -46,7 +46,7 @@
 import { mapGetters } from 'vuex'
 import { loadGenders } from '@/api/dict'
 import { loadDetail, updateAccount } from '@/api/account'
-import { isValidMobile, isValidLoginName } from '@/utils/validate'
+import { isValidMobile } from '@/utils/validate'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
 import { isEmployee } from '@/utils/user'
 
@@ -61,16 +61,7 @@ export default {
       }
       callback()
     }
-    const validateLoginName = (rule, value, callback) => {
-      if (value !== '') {
-        if (value !== '') {
-          if (!isValidLoginName(value)) {
-            callback(new Error('用户名以字母开头,长度在4-30之间,只能包含字符,数字和下划线'))
-          }
-        }
-      }
-      callback()
-    }
+
     return {
       account: {
         loginName: null,
@@ -85,11 +76,6 @@ export default {
       statuses: [],
       companyInfos: [],
       rules: {
-        loginName: [{
-          required: true, message: '请输入用户名', trigger: 'blur'
-        }, {
-          validator: validateLoginName, trigger: ['blur', 'change']
-        }],
         email: [{
           required: true, message: '请输入邮箱', trigger: 'blur'
         }, {
@@ -139,7 +125,6 @@ export default {
       this.$refs.accountEditForm.validate((valid) => {
         if (valid) {
           const account = {
-            loginName: this.account.loginName,
             realName: this.account.realName,
             nickName: this.account.nickName,
             email: this.account.email,

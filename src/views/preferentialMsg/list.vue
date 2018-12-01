@@ -9,7 +9,7 @@
         <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
       </el-select>
       <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
-      <router-link :to="'/notification/create'">
+      <router-link :to="'/preferentialMsg/create'">
         <el-button style="margin-left: 10px;" type="primary" icon="el-icon-edit">创建</el-button>
       </router-link>
     </div>
@@ -146,9 +146,7 @@ export default {
             duration: 2000
           })
         }).catch(err => {
-          if (err.data.errorMsg) {
-            console.log(err.data.errorMsg)
-          }
+          console.log(err.message)
         })
       }).catch(() => {
         this.$notify({
@@ -173,6 +171,8 @@ export default {
           duration: 2000
         })
         this.fetchData()
+      }).catch(err => {
+        console.log(err.message)
       })
     }
   }
