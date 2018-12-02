@@ -2,35 +2,35 @@ import request from '@/utils/request'
 
 export function loadAvailableRoles() {
   return request({
-    url: '/rs/ana/roles/available',
+    url: '/ana/roles/available',
     method: 'get'
   })
 }
 
 export function loadAvailableRolesOfCompany(companyId) {
   return request({
-    url: '/rs/ana/companyInfos/' + companyId + '/available',
+    url: '/ana/companyInfos/' + companyId + '/available',
     method: 'get'
   })
 }
 
 export function getRolesOfAccount(accountId) {
   return request({
-    url: '/rs/ana/accounts/' + accountId + '/roles',
+    url: '/ana/accounts/' + accountId + '/roles',
     method: 'get'
   })
 }
 
 export function getRolesOfEmployee(employeeId) {
   return request({
-    url: '/rs/ana/employees/' + employeeId + '/roles',
+    url: '/ana/employees/' + employeeId + '/roles',
     method: 'get'
   })
 }
 
 export function loadRoles(queryParams) {
   return request({
-    url: '/rs/ana/roles',
+    url: '/ana/roles',
     method: 'get',
     params: queryParams
   })
@@ -38,7 +38,7 @@ export function loadRoles(queryParams) {
 
 export function createRole(role) {
   return request({
-    url: '/rs/ana/roles',
+    url: '/ana/roles',
     method: 'post',
     data: role
   })
@@ -46,7 +46,7 @@ export function createRole(role) {
 
 export function updateRole(id, role) {
   return request({
-    url: '/rs/ana/roles/' + id,
+    url: '/ana/roles/' + id,
     method: 'put',
     data: role
   })
@@ -54,14 +54,14 @@ export function updateRole(id, role) {
 
 export function loadDetail(id) {
   return request({
-    url: '/rs/ana/roles/' + id,
+    url: '/ana/roles/' + id,
     method: 'get'
   })
 }
 
 export function addPermissionsToRole(roleId, permissionIds) {
   return request({
-    url: '/rs/ana/roles/' + roleId + '/permissions',
+    url: '/ana/roles/' + roleId + '/permissions',
     method: 'post',
     data: permissionIds
   })

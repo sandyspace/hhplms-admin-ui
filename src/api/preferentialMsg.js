@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function loadPreferentialMsgs(queryParams) {
   return request({
-    url: '/rs/pm/preferentialMsgs',
+    url: '/pm/preferentialMsgs',
     method: 'get',
     params: queryParams
   })
@@ -10,14 +10,14 @@ export function loadPreferentialMsgs(queryParams) {
 
 export function loadDetail(id) {
   return request({
-    url: '/rs/pm/preferentialMsgs/' + id,
+    url: '/pm/preferentialMsgs/' + id,
     method: 'get'
   })
 }
 
 export function createdPreferentialMsg(preferentialMsg) {
   return request({
-    url: '/rs/pm/preferentialMsgs',
+    url: '/pm/preferentialMsgs',
     method: 'post',
     data: preferentialMsg
   })
@@ -25,7 +25,7 @@ export function createdPreferentialMsg(preferentialMsg) {
 
 export function updatePreferentialMsg(id, preferentialMsg) {
   return request({
-    url: '/rs/pm/preferentialMsgs/' + id,
+    url: '/pm/preferentialMsgs/' + id,
     method: 'put',
     data: preferentialMsg
   })
@@ -33,7 +33,7 @@ export function updatePreferentialMsg(id, preferentialMsg) {
 
 export function updatePreferentialMsgStatus(id, updateStatusRequest) {
   return request({
-    url: '/rs/pm/preferentialMsgs/' + id + '/updateStatus',
+    url: '/pm/preferentialMsgs/' + id + '/updateStatus',
     method: 'patch',
     data: updateStatusRequest
   })
@@ -41,7 +41,7 @@ export function updatePreferentialMsgStatus(id, updateStatusRequest) {
 
 export function deletePreferentialMsg(id) {
   return request({
-    url: '/rs/pm/preferentialMsgs/' + id,
+    url: '/pm/preferentialMsgs/' + id,
     method: 'delete'
   })
 }

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function loadAccounts(queryParams) {
   return request({
-    url: '/rs/ana/accounts',
+    url: '/ana/accounts',
     method: 'get',
     params: queryParams
   })
@@ -10,21 +10,21 @@ export function loadAccounts(queryParams) {
 
 export function loadDetail(id) {
   return request({
-    url: '/rs/ana/accounts/' + id,
+    url: '/ana/accounts/' + id,
     method: 'get'
   })
 }
 
 export function getAccountByLoginName(loginName) {
   return request({
-    url: '/rs/ana/accounts/' + loginName + '/basicInfo',
+    url: '/ana/accounts/' + loginName + '/basicInfo',
     method: 'get'
   })
 }
 
 export function updateAccount(id, account) {
   return request({
-    url: '/rs/ana/accounts/' + id,
+    url: '/ana/accounts/' + id,
     method: 'put',
     data: account
   })
@@ -32,7 +32,7 @@ export function updateAccount(id, account) {
 
 export function createAccount(account) {
   return request({
-    url: '/rs/ana/accounts',
+    url: '/ana/accounts',
     method: 'post',
     data: account
   })
@@ -40,14 +40,14 @@ export function createAccount(account) {
 
 export function resetPwd(id) {
   return request({
-    url: '/rs/ana/accounts/' + id + '/resetPwd',
+    url: '/ana/accounts/' + id + '/resetPwd',
     method: 'patch'
   })
 }
 
 export function updateAccountType(id, updateTypeRequest) {
   return request({
-    url: '/rs/ana/accounts/' + id + '/updateType',
+    url: '/ana/accounts/' + id + '/updateType',
     method: 'patch',
     data: updateTypeRequest
   })
@@ -55,7 +55,7 @@ export function updateAccountType(id, updateTypeRequest) {
 
 export function updateAccountStatus(id, updateStatusRequest) {
   return request({
-    url: '/rs/ana/accounts/' + id + '/updateStatus',
+    url: '/ana/accounts/' + id + '/updateStatus',
     method: 'patch',
     data: updateStatusRequest
   })
@@ -63,7 +63,7 @@ export function updateAccountStatus(id, updateStatusRequest) {
 
 export function addRoleToAccount(id, ids) {
   return request({
-    url: '/rs/ana/accounts/' + id + '/roles',
+    url: '/ana/accounts/' + id + '/roles',
     method: 'post',
     data: ids
   })
@@ -71,7 +71,7 @@ export function addRoleToAccount(id, ids) {
 
 export function changePwd(changePasswordRequest) {
   return request({
-    url: '/rs/ana/accounts/changePwd',
+    url: '/ana/accounts/changePwd',
     method: 'patch',
     data: changePasswordRequest
   })
@@ -79,7 +79,7 @@ export function changePwd(changePasswordRequest) {
 
 export function updateSelfInfo(updateAccountRequest) {
   return request({
-    url: '/rs/ana/account/update',
+    url: '/ana/account/update',
     method: 'put',
     data: updateAccountRequest
   })

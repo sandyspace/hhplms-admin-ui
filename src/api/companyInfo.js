@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function loadCompanyInfos(queryParams) {
   return request({
-    url: '/rs/ana/companyInfos',
+    url: '/ana/companyInfos',
     method: 'get',
     params: queryParams
   })
@@ -10,14 +10,14 @@ export function loadCompanyInfos(queryParams) {
 
 export function getAvailableCompanyInfos() {
   return request({
-    url: '/rs/ana/companyInfos/available',
+    url: '/ana/companyInfos/available',
     method: 'get'
   })
 }
 
 export function getCompanyInfoOfSelf() {
   return request({
-    url: '/rs/ana/account/companyInfo',
+    url: '/ana/account/companyInfo',
     method: 'get'
   })
 }
@@ -32,28 +32,28 @@ export function updateSelfCompanyInfo(companyInfo) {
 
 export function getCompanyInfoOfAccount(loginName) {
   return request({
-    url: '/rs/ana/accounts/' + loginName + '/companyInfo',
+    url: '/ana/accounts/' + loginName + '/companyInfo',
     method: 'get'
   })
 }
 
 export function loadDetail(id) {
   return request({
-    url: '/rs/ana/companyInfos/' + id,
+    url: '/ana/companyInfos/' + id,
     method: 'get'
   })
 }
 
 export function deleteCompanyInfo(id) {
   return request({
-    url: '/rs/ana/companyInfos/' + id,
+    url: '/ana/companyInfos/' + id,
     method: 'delete'
   })
 }
 
 export function createCompanyInfo(companyInfo) {
   return request({
-    url: '/rs/ana/companyInfos',
+    url: '/ana/companyInfos',
     method: 'post',
     data: companyInfo
   })
@@ -61,7 +61,7 @@ export function createCompanyInfo(companyInfo) {
 
 export function updateCompanyInfo(id, companyInfo) {
   return request({
-    url: '/rs/ana/companyInfos/' + id,
+    url: '/ana/companyInfos/' + id,
     method: 'put',
     data: companyInfo
   })
@@ -69,7 +69,7 @@ export function updateCompanyInfo(id, companyInfo) {
 
 export function updateCompanyInfoStatus(id, updateStatusRequest) {
   return request({
-    url: '/rs/ana/companyInfos/' + id + '/updateStatus',
+    url: '/ana/companyInfos/' + id + '/updateStatus',
     method: 'patch',
     data: updateStatusRequest
   })

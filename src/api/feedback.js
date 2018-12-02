@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function loadFeedbacks(queryParams) {
   return request({
-    url: '/rs/sys/feedbacks',
+    url: '/sys/feedbacks',
     method: 'get',
     params: queryParams
   })
@@ -10,7 +10,7 @@ export function loadFeedbacks(queryParams) {
 
 export function deleteFeedback(id) {
   return request({
-    url: '/rs/sys/feedbacks/' + id,
+    url: '/sys/feedbacks/' + id,
     method: 'delete'
   })
 }

@@ -6,7 +6,7 @@ export function login(username, password) {
     password
   }
   return request({
-    url: '/rs/auth/login',
+    url: '/auth/login',
     method: 'post',
     data: loginRequest
   })
@@ -18,7 +18,7 @@ export function accountLogin(username, password) {
     password
   }
   return request({
-    url: '/rs/auth/account/login',
+    url: '/auth/account/login',
     method: 'post',
     data: loginRequest
   })
@@ -26,7 +26,7 @@ export function accountLogin(username, password) {
 
 export function retrieveUserProfile() {
   return request({
-    url: '/rs/auth/user/profile',
+    url: '/auth/user/profile',
     method: 'get'
   })
 }

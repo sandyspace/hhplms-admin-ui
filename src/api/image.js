@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function uploadImg(param) {
   return request({
-    url: '/rs/uploadImg',
+    url: '/uploadImg',
     method: 'post',
     data: param,
     headers: {
