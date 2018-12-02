@@ -12,7 +12,7 @@
           <el-option v-for="status in statuses" :key="status.key" :label="status.value" :value="status.key"/>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('所属企业')" prop="companyId">
+      <el-form-item v-if="ifEmployee()" :label="$t('所属企业')" prop="companyId">
         <el-select v-model="preferentialMsg.companyId" :placeholder="'选择企业'" clearable style="width: 150px">
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
@@ -41,7 +41,10 @@
 
   </div>
 </template>
+
 <script>
+import { mapGetters } from 'vuex'
+import { isEmployee } from '@/utils/user'
 import { loadPreferentialMsgStatuses } from '@/api/dict'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
 import { createdPreferentialMsg } from '@/api/preferentialMsg'
@@ -73,11 +76,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.getStatuses()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getCompanyInfos()
+    }
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     getStatuses() {
       loadPreferentialMsgStatuses().then(response => {
         this.statuses = response.data.content

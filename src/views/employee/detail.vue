@@ -32,7 +32,7 @@
       <el-tab-pane label="角色信息" name="role">
         <el-tag v-for="role in employee.grantedRoles" :key="role.code" size="medium">{{ role.name }}</el-tag>
       </el-tab-pane>
-      <el-tab-pane label="菜单权限" name="permissions">
+      <el-tab-pane v-if="employee.grantedPermissions && employee.grantedPermissions.length !== 0" label="菜单权限" name="permissions">
         <el-tree
           ref="permissionsTree"
           :data="employee.grantedPermissions"
@@ -40,7 +40,7 @@
           node-key="id"
           default-expand-all />
       </el-tab-pane>
-      <el-tab-pane label="接口权限" name="apiList">
+      <el-tab-pane v-if="employee.grantedApiList && employee.grantedApiList.length !== 0" label="接口权限" name="apiList">
         <el-tag v-for="api in employee.grantedApiList" :key="api.name" size="medium">{{ api.title }}</el-tag>
       </el-tab-pane>
     </el-tabs>

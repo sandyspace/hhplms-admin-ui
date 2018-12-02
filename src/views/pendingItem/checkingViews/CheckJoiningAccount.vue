@@ -4,7 +4,7 @@
       <span>审核之前请确认该账号是本企业的员工</span>
     </div>
     <div>
-      <el-form ref="accountForm" :model="account" label-position="left" label-width="100px" style="margin-left: 50px; margin-top:50px;">
+      <el-form ref="accountForm" :model="account" label-position="left" label-width="100px" style="margin-left: 10px; margin-top:10px;" size="mini">
         <el-form-item label="用户名">
           <span>{{ account.loginName }}</span>
         </el-form-item>

@@ -2,10 +2,10 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('标题')" v-model="queryParams.title" clearable style="width: 200px;" />
-      <el-select v-model="queryParams.status" clearable placeholder="请选择" style="width: 120px;">
+      <el-select v-model="queryParams.status" clearable placeholder="状态" style="width: 100px;">
         <el-option v-for="status in statuses" :key="status.key" :label="status.value" :value="status.key"/>
       </el-select>
-      <el-select v-model="queryParams.companyId" :placeholder="'所属企业'" clearable style="width: 150px">
+      <el-select v-if="ifEmployee()" v-model="queryParams.companyId" :placeholder="'所属企业'" clearable style="width: 250px">
         <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
       </el-select>
       <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
@@ -31,7 +31,7 @@
           <span>{{ scope.row.status | keyToValue(statuses) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属企业">
+      <el-table-column v-if="ifEmployee()" label="所属企业">
         <template slot-scope="scope">
           <span>{{ scope.row.companyId | idToName(companyInfos) }}</span>
         </template>
@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { isEmployee } from '@/utils/user'
 import { loadPreferentialMsgs, deletePreferentialMsg, updatePreferentialMsgStatus } from '@/api/preferentialMsg'
 import { loadPreferentialMsgStatuses } from '@/api/dict'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
@@ -95,12 +97,20 @@ export default {
       totalCount: 0
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
     this.fetchData()
     this.getStatuses()
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getCompanyInfos()
+    }
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     getStatuses() {
       loadPreferentialMsgStatuses().then(response => {
         this.statuses = response.data.content

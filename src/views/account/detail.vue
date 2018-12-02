@@ -33,15 +33,15 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="角色信息" name="role">
+        <el-tab-pane v-if="account.grantedRoles && account.grantedRoles.length !== 0" label="角色信息" name="role">
           <el-tag v-for="role in account.grantedRoles" :key="role.code" size="medium">{{ role.name }}</el-tag>
         </el-tab-pane>
-        <el-tab-pane label="菜单权限" name="permissions">
+        <el-tab-pane v-if="account.grantedPermissions && account.grantedPermissions.length !== 0" label="菜单权限" name="permissions">
           <template>
             <el-tree :data="account.grantedPermissions" :props="defaultProps" default-expand-all node-key="id"/>
           </template>
         </el-tab-pane>
-        <el-tab-pane label="接口权限" name="apiList">
+        <el-tab-pane v-if="account.grantedApiList && account.grantedApiList.length !== 0" label="接口权限" name="apiList">
           <el-tag v-for="api in account.grantedApiList" :key="api.name" size="medium">{{ api.title }}</el-tag>
         </el-tab-pane>
       </el-tabs>

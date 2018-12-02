@@ -7,7 +7,7 @@
       <el-form-item :label="$t('内容')" prop="content" style="width: 600px;">
         <el-input v-model="preferentialMsg.content" :rows="10" maxlength="300" placeholder="请输入内容" type="textarea"/>
       </el-form-item>
-      <el-form-item :label="$t('所属企业')" prop="companyId">
+      <el-form-item v-if="ifEmployee()" :label="$t('所属企业')" prop="companyId">
         <el-select v-model="preferentialMsg.companyId" :placeholder="'选择企业'" clearable style="width: 150px">
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { isEmployee } from '@/utils/user'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
 import { loadDetail, updatePreferentialMsg } from '@/api/preferentialMsg'
 import { uploadImg } from '@/api/image'
@@ -65,11 +67,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['type'])
+  },
   created() {
-    this.getCompanyInfos()
+    if (this.ifEmployee()) {
+      this.getCompanyInfos()
+    }
     this.fetchData()
   },
   methods: {
+    ifEmployee() {
+      return isEmployee(this.type)
+    },
     getCompanyInfos() {
       getAvailableCompanyInfos().then(response => {
         this.companyInfos = response.data.content
