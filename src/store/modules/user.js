@@ -90,7 +90,7 @@ const user = {
           commit('SET_NAME', profile.basicInfo.loginName)
           commit('SET_TYPE', profile.basicInfo.type)
           commit('SET_SUB_TYPE', profile.basicInfo.subType)
-          commit('SET_AVATAR', profile.basicInfo.headImgUrl || 'src/assets/avatar/' + profile.basicInfo.gender + '.png')
+          commit('SET_AVATAR', profile.basicInfo.headImgUrl || 'static/avatar/' + profile.basicInfo.gender + '.png')
           resolve(profile.permissions)
         }).catch(error => {
           reject(error)
