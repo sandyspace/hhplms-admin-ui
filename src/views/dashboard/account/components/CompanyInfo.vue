@@ -142,7 +142,7 @@ export default {
       this.switcher.selfCompanyInfoEditViewOn = false
     },
     ifUpdateBtnShow() {
-      return this.name === this.companyInfo.createdBy && this.subTypes !== 'company'
+      return this.name === this.companyInfo.createdBy && this.subType !== 'company'
     },
     getTypes() {
       loadCompanyInfoTypes().then(response => {

@@ -89,7 +89,7 @@
     </div>
     <el-dialog :visible.sync="stepCheckDialogVisible" :title="'审核 '+dialogTitle">
       <div class="dashboard-container">
-        <component :is="checkingView" :login-name="initBy"/>
+        <component :is="checkingView" :login-name="initBy" />
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="stepCheckDialogVisible = false">取 消</el-button>
@@ -239,6 +239,7 @@ export default {
           type: 'success',
           duration: 2000
         })
+        this.stepCheckDialogVisible = false
       }).catch(error => {
         console.log(error.message)
       })
