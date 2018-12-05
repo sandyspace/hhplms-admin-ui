@@ -3,6 +3,7 @@ const getters = {
   language: state => state.app.language,
   size: state => state.app.size,
   device: state => state.app.device,
+  uploadedImgBasePath: state => state.app.uploadedImgBasePath,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
   profile: state => state.user.profile,

@@ -26,7 +26,7 @@
           class="avatar-uploader"
           accept="image/*"
           action="">
-          <img v-if="preferentialMsg.imgUrl" :src="'/static/img/' + preferentialMsg.imgUrl" class="avatar">
+          <img v-if="preferentialMsg.imgUrl" :src="uploadedImgBasePath + preferentialMsg.imgUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"/>
         </el-upload>
       </el-form-item>
@@ -77,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['type'])
+    ...mapGetters(['type', 'uploadedImgBasePath'])
   },
   created() {
     this.getStatuses()

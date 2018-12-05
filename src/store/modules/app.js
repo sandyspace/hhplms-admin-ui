@@ -8,7 +8,8 @@ const app = {
     },
     device: 'desktop',
     language: Cookies.get('language') || 'zh',
-    size: Cookies.get('size') || 'medium'
+    size: Cookies.get('size') || 'medium',
+    uploadedImgBasePath: ''
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -35,6 +36,9 @@ const app = {
     SET_SIZE: (state, size) => {
       state.size = size
       Cookies.set('size', size)
+    },
+    SET_UPLOADED_IMG_BASE_PATH: (state, uploadedImgBasePath) => {
+      state.uploadedImgBasePath = uploadedImgBasePath
     }
   },
   actions: {
