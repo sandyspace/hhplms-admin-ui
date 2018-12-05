@@ -41,9 +41,6 @@
             <el-form-item label="邮件">
               <span>{{ props.row.email }}</span>
             </el-form-item>
-            <el-form-item label="电话">
-              <span>{{ props.row.tel }}</span>
-            </el-form-item>
             <el-form-item label="昵称">
               <span>{{ props.row.nickName }}</span>
             </el-form-item>
