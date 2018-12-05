@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column label="ID" prop="id" />
       <el-table-column label="标题" prop="title" />
-      <el-table-column label="状态" prop="status">
+      <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{ scope.row.status | keyToValue(statuses) }}</span>
         </template>

@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
       <el-table-column label="ID" prop="id" />
-      <el-table-column label="标题" prop="name" />
+      <el-table-column label="标题" prop="title" />
       <el-table-column label="联系人" prop="contact" />
       <el-table-column label="联系电话" prop="contactMobile" />
       <el-table-column label="留言时间">

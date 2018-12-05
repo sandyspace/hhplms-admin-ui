@@ -8,8 +8,8 @@
           v-model="userType"
           active-color="#13ce66"
           inactive-color="#3399ff"
-          active-text="雇员"
-          inactive-text="用户"
+          active-text="海桦"
+          inactive-text="企业"
           active-value="employee"
           inactive-value="account" />
         <h3 class="title">{{ $t('login.title') }}</h3>
