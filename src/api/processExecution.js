@@ -14,3 +14,10 @@ export function checkProcessExecution(processExecutionId) {
     method: 'post'
   })
 }
+
+export function terminateProcessExecution(processExecutionId) {
+  return request({
+    url: '/wf/processExecutions/' + processExecutionId + '/terminate',
+    method: 'patch'
+  })
+}

@@ -80,7 +80,7 @@
         label="操作"
         width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="prepareToCheck(scope.row)">审核</el-button>
+          <el-button v-if="scope.row.activeFlag === 'Y'" type="text" size="small" @click="prepareToCheck(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -92,15 +92,16 @@
         <component :is="checkingView" :login-name="initBy" />
       </div>
       <div slot="footer" class="dialog-footer">
+        <el-button size="mini" type="primary" @click="doTerminate">拒 绝</el-button>
+        <el-button size="mini" type="primary" @click="doCheck">通 过</el-button>
         <el-button size="mini" @click="stepCheckDialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="doCheck">确 认</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { loadProcessExecutions, checkProcessExecution } from '@/api/processExecution'
+import { loadProcessExecutions, checkProcessExecution, terminateProcessExecution } from '@/api/processExecution'
 import { loadProcessStatuses, loadStepStatuses } from '@/api/dict'
 import { loadAvailableProcesses } from '@/api/processInfo'
 import { getStepsOfProcess } from '@/api/step'
@@ -231,14 +232,29 @@ export default {
         this.stepCheckDialogVisible = true
       })
     },
+    doTerminate() {
+      terminateProcessExecution(this.currentProcessExecutionId).then(response => {
+        this.$notify({
+          title: '成功',
+          message: '已拒绝',
+          type: 'success',
+          duration: 2000
+        })
+        this.getProcessExecutions()
+        this.stepCheckDialogVisible = false
+      }).catch(error => {
+        console.log(error.message)
+      })
+    },
     doCheck() {
       checkProcessExecution(this.currentProcessExecutionId).then(response => {
         this.$notify({
           title: '成功',
-          message: '审核成功',
+          message: '审核完成',
           type: 'success',
           duration: 2000
         })
+        this.getProcessExecutions()
         this.stepCheckDialogVisible = false
       }).catch(error => {
         console.log(error.message)
