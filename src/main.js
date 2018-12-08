@@ -24,11 +24,7 @@ if (process.env.NODE_ENV === 'development') {
   require('./mock') // simulation data
 }
 
-if (process.env.NODE_ENV === 'production') {
-  store.commit('SET_UPLOADED_IMG_BASE_PATH', 'https://whhczy.cn/upload/')
-} else {
-  store.commit('SET_UPLOADED_IMG_BASE_PATH', '/static/img/')
-}
+store.commit('SET_UPLOADED_IMG_BASE_PATH', process.env.UPLOADED_IMG_BASE_PATH)
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
