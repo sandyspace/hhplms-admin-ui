@@ -8,26 +8,26 @@
         <el-input v-model="role.name" style="width: 150px;" />
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="分类" prop="category">
-        <el-select v-model="role.category" placeholder="请选择分类">
+        <el-select v-model="role.category" placeholder="请选择分类" @change="handleCategoryChange()">
           <el-option v-for="category in categories" :key="category.key" :label="category.value" :value="category.key"/>
         </el-select>
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="类型" prop="type">
         <el-select v-model="role.type" placeholder="请选择类型">
-          <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
+          <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key" :disabled="roleTypeDisabled(role.category, type.key)" />
         </el-select>
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="所属企业" prop="companyId">
-        <el-select v-model="role.companyId" :placeholder="'请选择企业'">
+        <el-select v-model="role.companyId" :placeholder="'请选择企业'" :disabled="companyIdDisabled(role.category)">
           <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="memo">
         <el-input
-          :rows="2"
+          :rows="4"
           v-model="role.memo"
           type="textarea"
-          style="width: 200px;"
+          style="width: 300px;"
         />
       </el-form-item>
       <el-form-item>
@@ -103,6 +103,36 @@ export default {
   methods: {
     ifEmployee() {
       return isEmployee(this.type)
+    },
+    roleTypeDisabled(roleCategory, roleType) {
+      if (roleCategory === 'employee') {
+        if (roleType === 'pre-assigned') {
+          return true
+        }
+      } else {
+        if (roleType === 'company-temp') {
+          return true
+        }
+      }
+      return false
+    },
+    companyIdDisabled(roleCategory) {
+      if (roleCategory === 'employee') {
+        return true
+      }
+      return false
+    },
+    handleCategoryChange() {
+      if (this.role.category === 'employee') {
+        this.role.companyId = null
+        if (this.role.type === 'pre-assigned') {
+          this.role.type = ''
+        }
+      } else {
+        if (this.role.type === 'company-temp') {
+          this.role.type = ''
+        }
+      }
     },
     getCategories() {
       loadRoleCategories().then(response => {

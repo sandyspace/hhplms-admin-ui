@@ -2,32 +2,26 @@
   <div class="app-container">
     <el-form ref="roleEditForm" :rules="rules" :model="role" label-width="80px">
       <el-form-item label="编码" prop="code">
-        <el-input v-model="role.code" style="width: 150px;" />
+        <span>{{ role.code }}</span>
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="role.name" style="width: 150px;" />
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="分类" prop="category">
-        <el-select v-model="role.category" placeholder="请选择分类">
-          <el-option v-for="category in categories" :key="category.key" :label="category.value" :value="category.key"/>
-        </el-select>
+        <span>{{ role.category| keyToValue(categories) }}</span>
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="类型" prop="type">
-        <el-select v-model="role.type" placeholder="请选择类型">
-          <el-option v-for="type in types" :key="type.key" :label="type.value" :value="type.key"/>
-        </el-select>
+        <span>{{ role.type | keyToValue(types) }}</span>
       </el-form-item>
       <el-form-item v-if="ifEmployee()" label="所属企业" prop="companyId">
-        <el-select v-model="role.companyId" :placeholder="'请选择企业'">
-          <el-option v-for="companyInfo in companyInfos" :key="companyInfo.id" :label="companyInfo.name" :value="companyInfo.id"/>
-        </el-select>
+        <span>{{ role.companyId | idToName(companyInfos) }}</span>
       </el-form-item>
       <el-form-item label="备注" prop="memo">
         <el-input
-          :rows="2"
+          :rows="4"
           v-model="role.memo"
           type="textarea"
-          style="width: 200px;"
+          style="width: 300px;"
         />
       </el-form-item>
       <el-form-item>
@@ -42,7 +36,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isValidCode } from '@/utils/validate'
 import { loadRoleCategories, loadRoleTypes } from '@/api/dict'
 import { updateRole, loadDetail } from '@/api/role'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
@@ -51,15 +44,6 @@ import { isEmployee } from '@/utils/user'
 export default {
   name: 'RoleEdit',
   data() {
-    var validateCode = (rule, value, callback) => {
-      if (value !== '') {
-        if (!isValidCode(value)) {
-          callback(new Error('编码以字母开头,长度在4-30之间,只能包含字符,数字和下划线'))
-        }
-      }
-      callback()
-    }
-
     return {
       categories: [],
       types: [],
@@ -73,19 +57,8 @@ export default {
         memo: null
       },
       rules: {
-        code: [{
-          required: true, message: '请输入编码', trigger: 'blur'
-        }, {
-          validator: validateCode, trigger: ['blur', 'change']
-        }],
         name: [{
           required: true, message: '请输入名称', trigger: 'blur'
-        }],
-        category: [{
-          required: true, message: '请选择分类', trigger: 'change'
-        }],
-        type: [{
-          required: true, message: '请选择类型', trigger: 'change'
         }]
       }
     }
@@ -130,7 +103,10 @@ export default {
     onSubmit() {
       this.$refs.roleEditForm.validate((valid) => {
         if (valid) {
-          updateRole(this.$route.params.id, this.role).then(response => {
+          updateRole(this.$route.params.id, {
+            name: this.role.name,
+            memo: this.role.memo
+          }).then(response => {
             this.$notify({
               title: '成功',
               message: '修改成功',

@@ -62,12 +62,12 @@
           <router-link :to="'/employee/detail/'+scope.row.id">
             <el-button type="text" size="small">查看</el-button>
           </router-link>
-          <router-link :to="'/employee/edit/'+scope.row.id">
+          <router-link v-if="scope.row.loginName !== name" :to="'/employee/edit/'+scope.row.id">
             <el-button type="text" size="small">编辑</el-button>
           </router-link>
-          <el-button type="text" size="small" @click="prepareToAddRolesToEmployee(scope.row.id)">分配角色</el-button>
-          <el-button type="text" size="small" @click="resetPwd(scope.row.id)">重置密码</el-button>
-          <el-dropdown @command="changeEmployeeStatus">
+          <el-button v-if="scope.row.loginName !== name" type="text" size="small" @click="prepareToAddRolesToEmployee(scope.row.id)">分配角色</el-button>
+          <el-button v-if="scope.row.loginName !== name" type="text" size="small" @click="resetPwd(scope.row.id)">重置密码</el-button>
+          <el-dropdown v-if="scope.row.loginName !== name" @command="changeEmployeeStatus">
             <span class="el-dropdown-link">
               更新状态<i class="el-icon-arrow-down el-icon--right" />
             </span>
@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { loadEmployees, addRolesToEmployee, updateStatus, resetPwd } from '@/api/employee'
 import { loadAvailableRoles, getRolesOfEmployee } from '@/api/role'
 import { loadGenders, loadEmployeeStatuses } from '@/api/dict'
@@ -121,6 +122,9 @@ export default {
       },
       totalCount: 0
     }
+  },
+  computed: {
+    ...mapGetters(['name'])
   },
   created() {
     this.getGenders()

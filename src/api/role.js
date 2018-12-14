@@ -52,6 +52,13 @@ export function updateRole(id, role) {
   })
 }
 
+export function removeRole(id) {
+  return request({
+    url: '/ana/roles/' + id,
+    method: 'delete'
+  })
+}
+
 export function loadDetail(id) {
   return request({
     url: '/ana/roles/' + id,

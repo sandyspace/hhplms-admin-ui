@@ -54,13 +54,14 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="200">
+        width="250">
         <template slot-scope="scope">
-          <router-link v-if="couldOperateRole(scope.row.type)" :to="'/role/edit/'+scope.row.id">
+          <router-link v-if="couldOperateRole(scope.row.type, scope.row.category)" :to="'/role/edit/'+scope.row.id">
             <el-button type="text" size="small">编辑</el-button>
           </router-link>
-          <el-button v-if="couldOperateRole(scope.row.type)" type="text" size="small" @click="prepareToAddPermissionsToRole(scope.row.id)">分配菜单</el-button>
-          <el-button v-if="couldOperateRole(scope.row.type)" type="text" size="small" @click="prepareToAddApisToRole(scope.row.id)">分配接口</el-button>
+          <el-button v-if="couldOperateRole(scope.row.type, scope.row.category)" type="text" size="small" @click="prepareToAddPermissionsToRole(scope.row.id)">分配菜单</el-button>
+          <el-button v-if="couldOperateRole(scope.row.type, scope.row.category)" type="text" size="small" @click="prepareToAddApisToRole(scope.row.id)">分配接口</el-button>
+          <el-button v-if="couldOperateRole(scope.row.type, scope.row.category)" type="text" size="small" @click="deleteRole(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,7 +99,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { loadRoles, addPermissionsToRole } from '@/api/role'
+import { loadRoles, addPermissionsToRole, removeRole } from '@/api/role'
 import { permissionsAvailableToAssign, getPermissionsOfRole, apisAvailableToAssign, getApiListOfRole } from '@/api/permission'
 import { loadRoleCategories, loadRoleTypes, loadRoleStatuses } from '@/api/dict'
 import { getAvailableCompanyInfos } from '@/api/companyInfo'
@@ -153,8 +154,8 @@ export default {
     ifEmployee() {
       return isEmployee(this.type)
     },
-    couldOperateRole(roleType) {
-      return canOperateRole(this.type, roleType)
+    couldOperateRole(roleType, roleCategory) {
+      return canOperateRole(this.type, roleType, roleCategory)
     },
     getCategories() {
       loadRoleCategories().then(response => {
@@ -293,6 +294,32 @@ export default {
         if (error.data.errorMsg) {
           console.log(error.data.errorMsg)
         }
+      })
+    },
+    deleteRole(id) {
+      this.$confirm('确认此角色没有分配给任何用户，否则删除将会失败，再次确认是否要删除此角色？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        removeRole(id).then(response => {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.getRoles()
+        }).catch(error => {
+          console.log(error.message)
+        })
+      }).catch(() => {
+        this.$notify({
+          title: '取消',
+          message: '已取消删除',
+          type: 'warning',
+          duration: 2000
+        })
       })
     }
   }

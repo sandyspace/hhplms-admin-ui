@@ -67,12 +67,12 @@
           <router-link :to="'/account/detail/'+scope.row.id">
             <el-button type="text" size="small">查看</el-button>
           </router-link>
-          <router-link :to="'/account/edit/'+scope.row.id">
+          <router-link v-if="canOperate(scope.row.loginName)" :to="'/account/edit/'+scope.row.id">
             <el-button type="text" size="small">编辑</el-button>
           </router-link>
-          <el-button type="text" size="small" @click="prepareToAddRolesToAccount(scope.row.id, scope.row.companyId)">分配角色</el-button>
-          <el-button type="text" size="small" @click="resetPwd(scope.row.id)">重置密码</el-button>
-          <el-dropdown @command="changeAccountStatus">
+          <el-button v-if="canOperate(scope.row.loginName)" type="text" size="small" @click="prepareToAddRolesToAccount(scope.row.id, scope.row.companyId)">分配角色</el-button>
+          <el-button v-if="canOperate(scope.row.loginName)" type="text" size="small" @click="resetPwd(scope.row.id)">重置密码</el-button>
+          <el-dropdown v-if="canOperate(scope.row.loginName)" @command="changeAccountStatus">
             <span class="el-dropdown-link">
               更新状态<i class="el-icon-arrow-down el-icon--right" />
             </span>
@@ -155,7 +155,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['type'])
+    ...mapGetters(['type', 'name'])
   },
   created() {
     this.getGenders()
@@ -167,6 +167,16 @@ export default {
     this.fetchData()
   },
   methods: {
+    canOperate(loginName) {
+      if (isEmployee(this.type)) {
+        return true
+      } else {
+        if (loginName !== this.name) {
+          return true
+        }
+      }
+      return false
+    },
     ifEmployee() {
       return isEmployee(this.type)
     },
