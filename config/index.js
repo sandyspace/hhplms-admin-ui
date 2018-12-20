@@ -68,7 +68,7 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    assetsPublicPath: process.env.ASSETS_PUBLIC_PATH,
+    assetsPublicPath: '/admin/',
 
     /**
      * Source Maps
