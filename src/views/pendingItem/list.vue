@@ -44,12 +44,6 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="pending-item-table-expand">
-            <el-form-item label="流程启动人">
-              <span>{{ props.row.initBy }}</span>
-            </el-form-item>
-            <el-form-item label="流程启动时间">
-              <span>{{ props.row.initTime | parseTime }}</span>
-            </el-form-item>
             <el-form-item label="审核人">
               <span>{{ props.row.checkedBy }}</span>
             </el-form-item>
@@ -73,6 +67,12 @@
       <el-table-column label="处理状态">
         <template slot-scope="scope">
           <span>{{ scope.row.activeFlag | keyToValue(stepFlags) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="申请人" prop="initBy" />
+      <el-table-column label="申请时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.initTime | parseTime }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -227,6 +227,7 @@ export default {
       this.currentProcessExecutionId = processExecution.id
       this.initBy = processExecution.initBy
       this.dialogTitle = processExecution.currentStep.name
+      this.checkingView = ''
       getRouteFragment(processExecution.process.id, processExecution.currentStep.id).then(response => {
         this.checkingView = response.data.content.viewOnChecking
         this.stepCheckDialogVisible = true
