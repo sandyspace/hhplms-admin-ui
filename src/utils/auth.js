@@ -1,28 +1,26 @@
-import Cookies from 'js-cookie'
-
-const ACCESS_TOKEN_KEY = 'Access-Token'
-const REFRESH_TOKEN_KEY = 'Refresh-Token'
+const ACCESS_TOKEN_KEY = 'access_token'
+const REFRESH_TOKEN_KEY = 'refresh_token'
 
 export function getToken() {
-  return Cookies.get(ACCESS_TOKEN_KEY)
+  return window.localStorage.getItem(ACCESS_TOKEN_KEY)
 }
 
 export function setToken(token) {
-  return Cookies.set(ACCESS_TOKEN_KEY, token)
+  return window.localStorage.setItem(ACCESS_TOKEN_KEY, token)
 }
 
 export function removeToken() {
-  return Cookies.remove(ACCESS_TOKEN_KEY)
+  return window.localStorage.removeItem(ACCESS_TOKEN_KEY)
 }
 
 export function getRefreshToken() {
-  return Cookies.get(REFRESH_TOKEN_KEY)
+  return window.localStorage.getItem(REFRESH_TOKEN_KEY)
 }
 
 export function setRefreshToken(refreshToken) {
-  return Cookies.set(REFRESH_TOKEN_KEY, refreshToken)
+  return window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
 }
 
 export function removeRefreshToken() {
-  return Cookies.remove(REFRESH_TOKEN_KEY)
+  return window.localStorage.removeItem(REFRESH_TOKEN_KEY)
 }
