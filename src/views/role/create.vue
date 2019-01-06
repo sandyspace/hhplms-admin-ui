@@ -109,10 +109,6 @@ export default {
         if (roleType === 'pre-assigned') {
           return true
         }
-      } else {
-        if (roleType === 'company-temp') {
-          return true
-        }
       }
       return false
     },
@@ -126,10 +122,6 @@ export default {
       if (this.role.category === 'employee') {
         this.role.companyId = null
         if (this.role.type === 'pre-assigned') {
-          this.role.type = ''
-        }
-      } else {
-        if (this.role.type === 'company-temp') {
           this.role.type = ''
         }
       }

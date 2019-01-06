@@ -33,3 +33,31 @@ export function getApiListOfRole(roleId) {
     method: 'get'
   })
 }
+
+export function permissionsAvailableToAssignTempRole() {
+  return request({
+    url: '/ana/tempRoles/permissions',
+    method: 'get'
+  })
+}
+
+export function apisAvailableToAssignTempRole() {
+  return request({
+    url: '/ana/tempRoles/apis',
+    method: 'get'
+  })
+}
+
+export function getPermissionsOfTempRole(tempRoleId) {
+  return request({
+    url: '/ana/tempRoles/' + tempRoleId + '/permissions',
+    method: 'get'
+  })
+}
+
+export function getApiListOfTempRole(tempRoleId) {
+  return request({
+    url: '/ana/tempRoles/' + tempRoleId + '/apis',
+    method: 'get'
+  })
+}

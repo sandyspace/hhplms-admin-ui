@@ -63,6 +63,20 @@ export function loadRoleStatuses() {
   })
 }
 
+export function loadTempRoleTypes() {
+  return request({
+    url: '/sys/tempRole/types',
+    method: 'get'
+  })
+}
+
+export function loadTempRoleStatuses() {
+  return request({
+    url: '/sys/tempRole/statuses',
+    method: 'get'
+  })
+}
+
 export function loadProcessStatuses() {
   return request({
     url: '/sys/process/statuses',
